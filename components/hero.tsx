@@ -1,0 +1,176 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Github, Mail, FileText, MapPin, Briefcase } from "lucide-react"
+import Image from "next/image"
+import { personalInfo } from "@/lib/data"
+
+export function Hero() {
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches
+    if (prefersReducedMotion) {
+      setIsVisible(true)
+      return
+    }
+
+    const timer = setTimeout(() => setIsVisible(true), 100)
+    return () => clearTimeout(timer)
+  }, [])
+
+  const scrollToProjects = () => {
+    document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  const getIcon = (iconType: string) => {
+    switch (iconType) {
+      case "github":
+        return <Github className="w-4 h-4" />
+      case "notion":
+        return <FileText className="w-4 h-4" />
+      case "email":
+        return <Mail className="w-4 h-4" />
+      default:
+        return <FileText className="w-4 h-4" />
+    }
+  }
+
+  return (
+    <section className="min-h-screen flex items-center px-6 md:px-12 lg:px-24 py-24">
+      <div className="max-w-5xl mx-auto w-full">
+        <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-center">
+          {/* Profile Image - Compact */}
+          <div
+            className={`shrink-0 transition-all duration-700 ease-out ${
+              isVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-8"
+            }`}
+          >
+            <div className="relative">
+              <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden bg-secondary ring-4 ring-card shadow-lg">
+                <Image
+                  src="/profile.jpg"
+                  alt="프로필 사진"
+                  width={160}
+                  height={160}
+                  className="w-full h-full object-cover"
+                  priority
+                />
+              </div>
+              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-medium shadow-md whitespace-nowrap">
+                {personalInfo.subtitle}
+              </div>
+            </div>
+          </div>
+
+          {/* Text Content */}
+          <div className="text-center lg:text-left flex-1">
+            <div
+              className={`transition-all duration-700 ease-out ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+            >
+              <p className="text-primary font-medium mb-2 text-sm tracking-wide">
+                안녕하세요
+              </p>
+            </div>
+
+            <h1
+              className={`text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight mb-4 tracking-tight transition-all duration-700 ease-out delay-100 ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+            >
+              <span className="text-primary">{personalInfo.title}</span>
+              <span className="block mt-1">{personalInfo.name}입니다</span>
+            </h1>
+
+            <p
+              className={`text-base md:text-lg text-muted-foreground max-w-lg mb-6 leading-relaxed transition-all duration-700 ease-out delay-200 mx-auto lg:mx-0 ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+            >
+              사용자 중심의 웹 애플리케이션을 만드는 것을 좋아합니다. 복잡한
+              문제를 직관적인 솔루션으로 바꾸는 일에 열정을 가지고 있습니다.
+            </p>
+
+            {/* Quick Info */}
+            <div
+              className={`flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-6 text-sm text-muted-foreground transition-all duration-700 ease-out delay-250 ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+            >
+              <div className="flex items-center gap-1.5">
+                <MapPin className="w-4 h-4 text-primary" />
+                <span>{personalInfo.location}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Briefcase className="w-4 h-4 text-primary" />
+                <span>{personalInfo.status}</span>
+              </div>
+            </div>
+
+            {/* Social Links */}
+            <div
+              className={`flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-6 transition-all duration-700 ease-out delay-300 ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+            >
+              {personalInfo.socialLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target={link.icon !== "email" ? "_blank" : undefined}
+                  rel={link.icon !== "email" ? "noopener noreferrer" : undefined}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-card border border-border rounded-full text-sm hover:border-primary hover:text-primary transition-colors cursor-pointer"
+                >
+                  {getIcon(link.icon)}
+                  <span>{link.label}</span>
+                </a>
+              ))}
+            </div>
+
+            {/* CTA Buttons */}
+            <div
+              className={`flex flex-wrap items-center justify-center lg:justify-start gap-3 transition-all duration-700 ease-out delay-400 ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+            >
+              <Button
+                onClick={scrollToProjects}
+                className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-5 text-sm font-medium cursor-pointer"
+              >
+                프로젝트 보기
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary px-6 py-5 text-sm font-medium bg-transparent cursor-pointer"
+              >
+                <a href="/resume.pdf" download>
+                  이력서 다운로드
+                </a>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
