@@ -17,11 +17,16 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files
-.env*
+.env.development
+.env.production
 
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
-next-env.d.tsPORTFOLIO_RESTRUCTURE_PLAN.md
+next-env.d.ts
+PORTFOLIO_RESTRUCTURE_PLAN.md
+
+*storybook.log
+storybook-static

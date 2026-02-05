@@ -18,14 +18,15 @@ export function AnimatedSection({ children, className = "", delay = 0 }: Animate
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
 
     if (prefersReducedMotion) {
-      setIsVisible(true)
-      return
+      const frame = window.requestAnimationFrame(() => setIsVisible(true))
+      return () => window.cancelAnimationFrame(frame)
     }
 
+    let timerId: number | null = null
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setTimeout(() => setIsVisible(true), delay)
+          timerId = window.setTimeout(() => setIsVisible(true), delay)
           observer.unobserve(entry.target)
         }
       },
@@ -36,13 +37,18 @@ export function AnimatedSection({ children, className = "", delay = 0 }: Animate
       observer.observe(ref.current)
     }
 
-    return () => observer.disconnect()
+    return () => {
+      if (timerId) {
+        window.clearTimeout(timerId)
+      }
+      observer.disconnect()
+    }
   }, [delay])
 
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ease-out ${
+      className={`transition-all duration-500 ease-out ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       } ${className}`}
     >

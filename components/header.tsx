@@ -3,6 +3,7 @@
 import React from "react"
 import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { navItems } from "@/lib/data"
 
 export function Header() {
@@ -35,39 +36,44 @@ export function Header() {
           : "bg-transparent"
       }`}
     >
-      <nav className="px-6 md:px-12 lg:px-24 py-4 flex items-center justify-between max-w-7xl mx-auto">
+      <nav className="px-5 md:px-10 lg:px-20 xl:px-28 2xl:px-36 py-4 flex items-center justify-between max-w-7xl mx-auto">
         <a href="#" className="text-xl font-bold text-foreground">
           Portfolio<span className="text-primary">.</span>
         </a>
 
         {/* Desktop Navigation */}
-        <ul className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
-            <li key={item.label}>
-              <a
-                href={item.href}
-                onClick={(e) => handleNavClick(e, item.href)}
-                className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium cursor-pointer"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div className="hidden md:flex items-center gap-6">
+          <ul className="flex items-center gap-8">
+            {navItems.map((item) => (
+              <li key={item.label}>
+                <a
+                  href={item.href}
+                  onClick={(e) => handleNavClick(e, item.href)}
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium cursor-pointer"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <ThemeToggle className="h-9 w-9" />
+        </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          type="button"
-          className="md:hidden p-2 text-foreground cursor-pointer"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label={isMobileMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
-        >
-          {isMobileMenuOpen ? (
-            <X className="h-6 w-6" />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle className="h-9 w-9" />
+          <button
+            type="button"
+            className="p-2 text-foreground cursor-pointer"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
+          >
+            {isMobileMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile Navigation */}
@@ -85,6 +91,9 @@ export function Header() {
                 </a>
               </li>
             ))}
+            <li>
+              <ThemeToggle className="h-9 w-9" />
+            </li>
           </ul>
         </div>
       )}
