@@ -8,6 +8,11 @@ export interface Project {
   link: string
   github?: string
   category: 'featured' | 'other'
+  role?: string
+  highlights?: string[]
+  client?: string
+  period?: string
+  coverImage?: string
 }
 
 export interface Skill {
@@ -40,6 +45,7 @@ export interface Activity {
   period: string
   description: string
   type: 'external' | 'personal'
+  link?: string
 }
 
 export interface Education {
@@ -61,6 +67,7 @@ export interface PersonalInfo {
   name: string
   title: string
   subtitle: string
+  subtitleRotations?: string[]
   location: string
   status: string
   email: string
