@@ -43,6 +43,9 @@ function ProjectCard({ project, index }: ProjectCardProps) {
 }
 
 export function Projects() {
+  const featuredProjects = projects.filter((p) => p.category === "featured")
+  const otherProjects = projects.filter((p) => p.category === "other")
+
   return (
     <section id="projects" className="py-24 md:py-32 px-6 md:px-12 lg:px-24">
       <div className="max-w-6xl mx-auto">
@@ -54,10 +57,27 @@ export function Projects() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {projects.map((project, index) => (
+          {featuredProjects.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
           ))}
         </div>
+
+        {otherProjects.length > 0 && (
+          <>
+            <div className="mt-20 mb-12">
+              <SectionHeader
+                title="기타 프로젝트"
+                subtitle="그 외 진행한 프로젝트들"
+              />
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {otherProjects.map((project, index) => (
+                <ProjectCard key={project.id} project={project} index={index} />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </section>
   )

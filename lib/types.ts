@@ -7,6 +7,7 @@ export interface Project {
   techStack: string[]
   link: string
   github?: string
+  category: 'featured' | 'other'
 }
 
 export interface Skill {
@@ -32,6 +33,24 @@ export interface FAQ {
   answer: string
 }
 
+export interface Activity {
+  id: string
+  title: string
+  organization: string
+  period: string
+  description: string
+  type: 'external' | 'personal'
+}
+
+export interface Education {
+  id: string
+  school: string
+  degree: string
+  field: string
+  period: string
+  description?: string
+}
+
 export interface SocialLink {
   label: string
   href: string
@@ -47,4 +66,5 @@ export interface PersonalInfo {
   email: string
   bio: string[]
   socialLinks: SocialLink[]
+  techBadges?: string[]
 }

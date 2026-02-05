@@ -4,6 +4,8 @@ import type {
   SkillCategory,
   Experience,
   FAQ,
+  Activity,
+  Education,
 } from "./types"
 
 // 개인 정보 - 여기서 쉽게 수정 가능
@@ -24,6 +26,7 @@ export const personalInfo: PersonalInfo = {
     { label: "Notion", href: "https://notion.so/username", icon: "notion" },
     { label: "Email", href: "mailto:hello@example.com", icon: "email" },
   ],
+  techBadges: ["React", "Next.js", "TypeScript", "JavaScript"],
 }
 
 // 프로젝트 데이터 - Notion API나 CMS로 대체 가능
@@ -36,6 +39,7 @@ export const projects: Project[] = [
     techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Stripe"],
     link: "/projects/ecommerce-platform",
     github: "https://github.com/username/ecommerce",
+    category: "featured",
   },
   {
     id: "2",
@@ -44,6 +48,7 @@ export const projects: Project[] = [
       "분산 팀을 위한 실시간 편집, 프레젠스 표시, 오프라인 지원이 포함된 Notion 스타일의 협업 워크스페이스를 구축했습니다.",
     techStack: ["React", "WebSockets", "Y.js", "PostgreSQL"],
     link: "/projects/collaboration-tool",
+    category: "featured",
   },
   {
     id: "3",
@@ -52,6 +57,7 @@ export const projects: Project[] = [
       "의료 전문가가 복잡한 시각화로 환자 데이터를 모니터링할 수 있는 접근성 높은 대시보드를 설계하고 개발했습니다.",
     techStack: ["Next.js", "D3.js", "React Query", "Accessibility"],
     link: "/projects/healthcare-dashboard",
+    category: "other",
   },
   {
     id: "4",
@@ -60,6 +66,7 @@ export const projects: Project[] = [
       "5개 제품 팀에서 사용하는 50개 이상의 컴포넌트, 문서화, Figma 통합이 포함된 종합적인 디자인 시스템을 만들었습니다.",
     techStack: ["React", "Storybook", "CSS-in-JS", "Testing Library"],
     link: "/projects/design-system",
+    category: "other",
   },
 ]
 
@@ -160,12 +167,45 @@ export const faqs: FAQ[] = [
   },
 ]
 
+// 대외/개인활동 데이터
+export const activities: Activity[] = [
+  {
+    id: "1",
+    title: "오픈소스 컨트리뷰터",
+    organization: "React 생태계",
+    period: "2022 — 현재",
+    description: "React 관련 오픈소스 프로젝트에 기여하고, 버그 수정 및 기능 개선에 참여하고 있습니다.",
+    type: "external",
+  },
+  {
+    id: "2",
+    title: "기술 블로그 운영",
+    organization: "개인",
+    period: "2021 — 현재",
+    description: "프론트엔드 개발 경험과 학습 내용을 공유하는 기술 블로그를 운영하고 있습니다.",
+    type: "personal",
+  },
+]
+
+// 학력 데이터
+export const educations: Education[] = [
+  {
+    id: "1",
+    school: "한국대학교",
+    degree: "학사",
+    field: "컴퓨터공학",
+    period: "2014 — 2018",
+    description: "소프트웨어 공학 및 웹 개발 관련 과목 이수",
+  },
+]
+
 // 네비게이션 아이템
 export const navItems = [
   { label: "소개", href: "#about" },
-  { label: "기술", href: "#skills" },
   { label: "프로젝트", href: "#projects" },
   { label: "경력", href: "#experience" },
+  { label: "활동", href: "#activities" },
+  { label: "학력", href: "#education" },
   { label: "Q&A", href: "#faq" },
   { label: "연락처", href: "#contact" },
 ]

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { Github, Mail, FileText, MapPin, Briefcase } from "lucide-react"
 import Image from "next/image"
 import { personalInfo } from "@/lib/data"
@@ -106,7 +107,7 @@ export function Hero() {
 
             {/* Quick Info */}
             <div
-              className={`flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-6 text-sm text-muted-foreground transition-all duration-700 ease-out delay-250 ${
+              className={`flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-4 text-sm text-muted-foreground transition-all duration-700 ease-out delay-250 ${
                 isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-8"
@@ -121,6 +122,27 @@ export function Hero() {
                 <span>{personalInfo.status}</span>
               </div>
             </div>
+
+            {/* Tech Badges */}
+            {personalInfo.techBadges && (
+              <div
+                className={`flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-6 transition-all duration-700 ease-out delay-275 ${
+                  isVisible
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-8"
+                }`}
+              >
+                {personalInfo.techBadges.map((tech) => (
+                  <Badge
+                    key={tech}
+                    variant="secondary"
+                    className="px-3 py-1 text-sm font-medium"
+                  >
+                    {tech}
+                  </Badge>
+                ))}
+              </div>
+            )}
 
             {/* Social Links */}
             <div
