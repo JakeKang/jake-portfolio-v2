@@ -128,7 +128,9 @@
 }
 
 @layer base {
-  *, ::before, ::after {
+  *,
+  ::before,
+  ::after {
     @apply transition-colors duration-150;
   }
 }
@@ -150,6 +152,96 @@
     opacity: 0;
     transform: translateY(-100%);
   }
+}
+
+@keyframes hero-float {
+  0% {
+    transform: translateY(0px);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateY(-8px);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 0.55;
+  }
+}
+
+@keyframes hero-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hero-scroll {
+  0% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  60% {
+    transform: translateY(8px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+}
+
+.hero-grid-bg {
+  background-image: linear-gradient(
+      to right,
+      rgba(45, 74, 62, 0.08) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgba(45, 74, 62, 0.08) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+.section-grid-bg {
+  background-image: linear-gradient(
+      to right,
+      rgba(45, 74, 62, 0.06) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgba(45, 74, 62, 0.06) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.section-radial-glow {
+  background: radial-gradient(
+    circle at top,
+    rgba(45, 74, 62, 0.12),
+    transparent 70%
+  );
+}
+
+
+.hero-float {
+  animation: hero-float 6s ease-in-out infinite;
+}
+
+.hero-float-delay {
+  animation-delay: 1.5s;
+}
+
+.hero-float-slower {
+  animation-duration: 8s;
+}
+
+
+.hero-scroll-indicator {
+  display: inline-block;
+  width: 2px;
+  height: 20px;
+  border-radius: 999px;
+  background: rgba(45, 74, 62, 0.35);
+  animation: hero-scroll 1.8s ease-in-out infinite;
 }
 
 .animate-subtitle-slide {
@@ -184,4 +276,251 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: hsl(var(--muted-foreground));
+}
+
+.notion-content .notion-page {
+  padding: 0;
+  width: 100%;
+}
+
+.notion-content .notion-title,
+.notion-content .notion-page-icon-hero {
+  display: none;
+}
+
+.notion-content .notion-text {
+  padding: 0.25em 0;
+  color: var(--foreground);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.notion-content .notion-h1,
+.notion-content .notion-h2,
+.notion-content .notion-h3 {
+  color: var(--foreground);
+  margin-top: 1.1em;
+  margin-bottom: 0.35em;
+}
+
+.notion-content .notion-h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.notion-content .notion-h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.notion-content .notion-h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.notion-content .notion-asset-wrapper {
+  max-width: 100%;
+  margin: 0.75rem 0;
+}
+
+.notion-content .notion-asset-wrapper img {
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+}
+
+.notion-image-button {
+  display: block;
+  width: 100%;
+  cursor: zoom-in;
+}
+
+.notion-image-button img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.notion-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(12, 15, 20, 0.75);
+  backdrop-filter: blur(6px);
+}
+
+.notion-lightbox__content {
+  max-width: min(90vw, 1100px);
+  max-height: min(90vh, 900px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.notion-lightbox__image {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.notion-lightbox__caption {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.notion-lightbox__close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  font-size: 2rem;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.8);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.notion-lightbox__close:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+.notion-content .notion-collection-card-cover img {
+  border-radius: 0.5rem;
+}
+
+.notion-content .notion-callout {
+  background: var(--secondary);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  padding: 1rem;
+  margin: 0.75rem 0;
+}
+
+.notion-content .notion-quote {
+  border-left: 3px solid var(--primary);
+  padding-left: 1rem;
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+.notion-content .notion-code {
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  font-family: var(--font-mono);
+}
+
+.notion-content .notion-inline-code {
+  background: var(--secondary);
+  color: var(--primary);
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+}
+
+.notion-content .notion-list {
+  padding-left: 1.25em;
+  margin: 0;
+}
+
+.notion-content .notion-list li {
+  padding: 4px 0px;
+}
+
+.notion-content .notion-list-disc {
+  list-style-type: disc;
+}
+
+.notion-content .notion-list-numbered {
+  list-style-type: decimal;
+}
+
+.notion-content .notion-to-do {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.notion-content .notion-hr {
+  border-color: var(--border);
+  margin: 1rem 0;
+}
+
+.notion-content .notion-link {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.notion-content .notion-link:hover {
+  opacity: 0.8;
+}
+
+.notion-content .notion-bookmark {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.notion-content .notion-bookmark:hover {
+  background: var(--secondary);
+}
+
+.dark .notion-content .notion-page {
+  background: transparent;
+}
+
+.dark .notion-content .notion-viewport {
+  background: transparent;
+}
+
+/* Modal scrollbar styles */
+.modal-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted) transparent;
+}
+
+.modal-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+  margin: 8px 0;
+}
+
+.modal-scroll::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.dark .modal-scroll {
+  scrollbar-color: var(--muted) transparent;
+}
+
+.dark .modal-scroll::-webkit-scrollbar-thumb {
+  background: var(--muted);
+}
+
+.dark .modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
 }

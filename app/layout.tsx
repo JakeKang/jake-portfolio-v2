@@ -3,6 +3,9 @@ import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/next'
 import { Providers } from "@/app/providers"
 import './globals.css'
+import 'react-notion-x/src/styles.css'
+import 'prismjs/themes/prism-tomorrow.css'
+import 'katex/dist/katex.min.css'
 
 export const metadata: Metadata = {
   title: '프론트엔드 개발자 포트폴리오',
