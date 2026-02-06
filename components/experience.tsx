@@ -48,9 +48,13 @@ export function Experience() {
   return (
     <section
       id="experience"
-      className="py-20 md:py-28 px-5 md:px-10 lg:px-20 xl:px-28 2xl:px-36 bg-secondary/70"
+      className="relative py-20 md:py-28 px-5 md:px-10 lg:px-20 xl:px-28 2xl:px-36 bg-secondary/70 overflow-hidden"
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 section-grid-bg opacity-30 dark:opacity-15" />
+        <div className="absolute bottom-[-20%] left-[-5%] h-64 w-64 rounded-full section-radial-glow blur-3xl" />
+      </div>
+      <div className="relative z-10 max-w-6xl mx-auto">
         <div className="mb-12 md:mb-14">
           <SectionHeader
             title="경력"

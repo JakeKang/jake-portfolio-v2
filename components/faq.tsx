@@ -20,8 +20,12 @@ const formatFaqAnswer = (value: string) => {
 
 export function FAQ() {
   return (
-    <section id="faq" className="py-20 md:py-28 px-5 md:px-10 lg:px-20 xl:px-28 2xl:px-36 bg-secondary/30">
-      <div className="max-w-6xl mx-auto">
+    <section id="faq" className="relative py-20 md:py-28 px-5 md:px-10 lg:px-20 xl:px-28 2xl:px-36 bg-secondary/30 overflow-hidden">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 section-grid-bg opacity-20 dark:opacity-10" />
+        <div className="absolute top-[-20%] left-[15%] h-52 w-52 rounded-full section-radial-glow blur-3xl" />
+      </div>
+      <div className="relative z-10 max-w-6xl mx-auto">
         <div className="mb-10 md:mb-12">
           <SectionHeader title="Q&A" subtitle="기술적인 질문들에 대한 답변" />
         </div>

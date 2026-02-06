@@ -57,8 +57,18 @@ export function Hero() {
   };
 
   return (
-    <section className='min-h-screen flex items-center px-5 md:px-10 lg:px-20 xl:px-28 2xl:px-36 py-20 md:py-24 lg:py-28 bg-secondary/30'>
-      <div className='max-w-6xl mx-auto w-full'>
+    <section className='relative min-h-screen flex items-center px-5 md:px-10 lg:px-20 xl:px-28 2xl:px-36 py-20 md:py-24 lg:py-28 bg-secondary/30 overflow-hidden'>
+      <div className='pointer-events-none absolute inset-0'>
+        <div className='absolute inset-0 hero-grid-bg opacity-60 dark:opacity-30' />
+        <div className='absolute -top-32 right-[-10%] h-72 w-72 rounded-full bg-[radial-gradient(circle_at_top,_rgba(45,74,62,0.18),_transparent_65%)] blur-3xl' />
+        <div className='absolute bottom-[-20%] left-[-10%] h-96 w-96 rounded-full bg-[radial-gradient(circle_at_bottom,_rgba(45,74,62,0.14),_transparent_70%)] blur-3xl' />
+        <div className='absolute inset-0 bg-[linear-gradient(120deg,_rgba(45,74,62,0.06),_transparent_55%)]' />
+        <div className='absolute inset-0 opacity-70 dark:opacity-40 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.5),_transparent_70%)]' />
+        <div className='absolute left-[12%] top-[22%] h-2 w-2 rounded-full bg-primary/50 hero-float' />
+        <div className='absolute right-[18%] top-[35%] h-1.5 w-1.5 rounded-full bg-primary/40 hero-float hero-float-delay' />
+        <div className='absolute left-[32%] bottom-[18%] h-1.5 w-1.5 rounded-full bg-primary/35 hero-float hero-float-slower' />
+      </div>
+      <div className='relative z-10 max-w-6xl mx-auto w-full'>
         <div className='flex flex-col lg:flex-row gap-10 lg:gap-14 items-center'>
           {/* Profile Image - Compact */}
           <div
@@ -195,6 +205,10 @@ export function Hero() {
             </div>
           </div>
         </div>
+      </div>
+      <div className='pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-xs text-muted-foreground/80'>
+        <span>Scroll</span>
+        <span className='hero-scroll-indicator' aria-hidden='true' />
       </div>
     </section>
   );

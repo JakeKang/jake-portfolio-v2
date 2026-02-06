@@ -6,8 +6,12 @@ export function About() {
   return (
     <section
       id='about'
-      className='py-20 md:py-28 px-5 md:px-10 lg:px-20 xl:px-28 2xl:px-36 bg-secondary/70'>
-      <div className='max-w-6xl mx-auto'>
+      className='relative py-20 md:py-28 px-5 md:px-10 lg:px-20 xl:px-28 2xl:px-36 bg-secondary/70 overflow-hidden'>
+      <div className='pointer-events-none absolute inset-0'>
+        <div className='absolute inset-0 section-grid-bg opacity-40 dark:opacity-20' />
+        <div className='absolute -top-24 right-[-10%] h-56 w-56 rounded-full section-radial-glow blur-3xl' />
+      </div>
+      <div className='relative z-10 max-w-6xl mx-auto'>
         <div className='mb-8'>
           <SectionHeader title='소개' />
         </div>

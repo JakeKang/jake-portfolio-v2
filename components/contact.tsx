@@ -8,8 +8,12 @@ export function Contact() {
   return (
     <section
       id='contact'
-      className='py-20 md:py-28 px-5 md:px-10 lg:px-20 xl:px-28 2xl:px-36 bg-secondary/70'>
-      <div className='max-w-6xl mx-auto text-center'>
+      className='relative py-20 md:py-28 px-5 md:px-10 lg:px-20 xl:px-28 2xl:px-36 bg-secondary/70 overflow-hidden'>
+      <div className='pointer-events-none absolute inset-0'>
+        <div className='absolute inset-0 section-grid-bg opacity-25 dark:opacity-12' />
+        <div className='absolute bottom-[-25%] right-[-5%] h-60 w-60 rounded-full section-radial-glow blur-3xl' />
+      </div>
+      <div className='relative z-10 max-w-6xl mx-auto text-center'>
         <div className='mb-8 md:mb-10'>
           <SectionHeader
             title='연락처'
