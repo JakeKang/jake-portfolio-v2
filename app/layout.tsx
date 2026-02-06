@@ -2,7 +2,6 @@ import React from 'react';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import Script from 'next/script';
-import { Analytics } from '@vercel/analytics/next';
 import { Providers } from '@/app/providers';
 import './globals.css';
 import 'react-notion-x/src/styles.css';
@@ -16,7 +15,11 @@ export const metadata: Metadata = {
   robots: {
     index: false,
     follow: false,
-    nocache: true,
+    nocache: true, // 검색 엔진이 이 페이지를 캐싱(저장)하지 못하게 함
+    noarchive: true, // '저장된 페이지' 링크를 생성하지 못하게 함
+    nosnippet: true, // 검색 결과에 텍스트 요약이 나가는 것을 방지
+    noimageindex: true, // 이미지 검색에 포함되지 않도록 함
+    notranslate: true, // 구글 번역기 표시 방지
     googleBot: {
       index: false,
       follow: false,
@@ -25,6 +28,12 @@ export const metadata: Metadata = {
       'max-image-preview': 'none',
       'max-video-preview': -1,
     },
+  },
+  // 다른 사이트(카톡, 페북 등)에 링크 공유 시 정보 노출 방지
+  openGraph: {
+    title: 'Private Portfolio',
+    description: '접근 권한이 필요합니다.',
+    images: [], // 공유 시 이미지 안 뜨게 설정
   },
 };
 
@@ -64,8 +73,7 @@ export default function RootLayout({
     <html lang='ko' suppressHydrationWarning>
       <head />
       <body
-        className={`${pretendard.variable} font-sans antialiased bg-background text-foreground`}
-      >
+        className={`${pretendard.variable} font-sans antialiased bg-background text-foreground`}>
         <Providers>{children}</Providers>
         <Script
           src='https://www.googletagmanager.com/gtag/js?id=G-3GBK56C1XR'
@@ -77,7 +85,6 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-3GBK56C1XR');`}
         </Script>
-        <Analytics />
       </body>
     </html>
   );
