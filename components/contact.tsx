@@ -47,7 +47,7 @@ export function Contact() {
               <span className='text-sm font-medium'>GitHub</span>
             </a>
             <a
-              href='https://chavis-k.notion.site/YongJun-Kang-2f72e95e04e680af84afc882407a5b08?pvs=74'
+              href='https://chavis-k.notion.site/'
               target='_blank'
               rel='noopener noreferrer'
               className='flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors p-3 rounded-lg hover:bg-secondary cursor-pointer'

@@ -33,7 +33,7 @@ export const personalInfo: PersonalInfo = {
     { label: 'GitHub', href: 'https://github.com/JakeKang', icon: 'github' },
     {
       label: 'Notion',
-      href: 'https://chavis-k.notion.site/YongJun-Kang-2f72e95e04e680af84afc882407a5b08?pvs=74',
+      href: 'https://chavis-k.notion.site/',
       icon: 'notion',
     },
     { label: 'Email', href: 'mailto:gksmfcjs91@gmail.com', icon: 'email' },
