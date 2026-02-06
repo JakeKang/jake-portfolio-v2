@@ -42,8 +42,54 @@ function getFirstTextProperty(
     const property = properties[key] as
       | { type: "title"; title: { plain_text: string }[] }
       | { type: "rich_text"; rich_text: { plain_text: string }[] }
+      | { type: "formula"; formula: { type: "string"; string: string | null } }
       | undefined
-    const value = extractPlainText(property)
+    const value =
+      property?.type === "formula"
+        ? property.formula.string ?? ""
+        : extractPlainText(property)
+    if (value) {
+      return value
+    }
+  }
+  return ""
+}
+
+function formatYearMonth(value: string) {
+  const match = value.match(/(\d{4})[-./](\d{1,2})/)
+  if (!match) {
+    return ""
+  }
+  const year = match[1]
+  const month = match[2].padStart(2, "0")
+  return `${year}-${month}`
+}
+
+function getDateProperty(
+  property:
+    | { type: "date"; date: { start: string; end?: string | null } | null }
+    | undefined
+) {
+  if (!property || property.type !== "date" || !property.date?.start) {
+    return ""
+  }
+  const start = formatYearMonth(property.date.start)
+  if (!start) {
+    return ""
+  }
+  const end = property.date.end ? formatYearMonth(property.date.end) : "현재"
+  return `${start} ~ ${end}`
+}
+
+function getFirstDateProperty(
+  properties: Record<string, unknown>,
+  keys: string[]
+) {
+  for (const key of keys) {
+    const property = properties[key] as
+      | { type: "date"; date: { start: string; end?: string | null } | null }
+      | undefined
+    const value = getDateProperty(property)
     if (value) {
       return value
     }
@@ -122,11 +168,17 @@ async function queryProjects(databaseId: string, category: Project["category"]) 
       getFirstTextProperty(properties, ["이름", "제목", "Title", "Name"]) ||
       "프로젝트"
     const client = getFirstTextProperty(properties, ["클라이언트", "Client"]) || ""
-    const period = getFirstTextProperty(properties, [
-      "프로젝트 기간",
-      "기간",
-      "Period",
-    ])
+    const period =
+      getFirstDateProperty(properties, [
+        "프로젝트 기간",
+        "기간",
+        "Period",
+      ]) ||
+      getFirstTextProperty(properties, [
+        "프로젝트 기간",
+        "기간",
+        "Period",
+      ])
     const description =
       getFirstTextProperty(properties, ["클라이언트", "설명", "Description"]) ||
       period ||
