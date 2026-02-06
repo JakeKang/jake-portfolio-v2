@@ -9,9 +9,8 @@ import 'prismjs/themes/prism-tomorrow.css';
 import 'katex/dist/katex.min.css';
 
 export const metadata: Metadata = {
-  title: '프론트엔드 개발자 포트폴리오',
-  description:
-    '프로덕트 마인드를 가진 프론트엔드 개발자. 5년간 사용자 중심의 웹 애플리케이션을 구축해왔습니다.',
+  title: 'JakeKang포트폴리오',
+  description: '사용자 중심의 경험을 설계하고 구현하는 프론트엔드 개발자 포트폴리오.',
   robots: {
     index: false,
     follow: false,
@@ -29,11 +28,31 @@ export const metadata: Metadata = {
       'max-video-preview': -1,
     },
   },
-  // 다른 사이트(카톡, 페북 등)에 링크 공유 시 정보 노출 방지
   openGraph: {
-    title: 'Private Portfolio',
-    description: '접근 권한이 필요합니다.',
-    images: [], // 공유 시 이미지 안 뜨게 설정
+    title: 'JakeKang 포트폴리오',
+    description: '사용자 중심의 경험을 설계하고 구현하는 프론트엔드 개발자.',
+    images: [
+      {
+        url: '/android-chrome-512x512.png',
+        width: 512,
+        height: 512,
+        alt: 'JakeKang 포트폴리오 로고',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'JakeKang 포트폴리오',
+    description: '사용자 중심의 경험을 설계하고 구현하는 프론트엔드 개발자.',
+    images: ['/android-chrome-512x512.png'],
+  },
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.ico' },
+    ],
+    apple: '/apple-touch-icon.png',
   },
 };
 
