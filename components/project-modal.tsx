@@ -1,235 +1,302 @@
-"use client"
+'use client';
 
-import { useEffect, useState } from "react"
-import { Badge } from "@/components/ui/badge"
-import { Skeleton } from "@/components/ui/skeleton"
+import dynamic from 'next/dynamic';
+import { NotionRenderer } from 'react-notion-x';
+import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import type { Project } from "@/lib/types"
-import { useNotionProjectDetail } from "@/hooks/use-notion-project-detail"
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import type { Project } from '@/lib/types';
+import { useNotionProjectDetail } from '@/hooks/use-notion-project-detail';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTheme } from 'next-themes';
+
+// Lazy load heavy components for better performance
+const Code = dynamic(
+  () => import('react-notion-x/build/third-party/code').then((m) => m.Code),
+  { ssr: false },
+);
+const Equation = dynamic(
+  () =>
+    import('react-notion-x/build/third-party/equation').then((m) => m.Equation),
+  { ssr: false },
+);
 
 interface ProjectModalProps {
-  project: Project | null
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  project: Project | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-export function ProjectModal({ project, open, onOpenChange }: ProjectModalProps) {
-  if (!open) {
-    return null
+function formatPeriodLabel(period?: string) {
+  if (!period) {
+    return '';
   }
+  return period
+    .replace(/\./g, '-')
+    .replace(/\s*~\s*/g, ' ~ ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
-  const { data, isLoading } = useNotionProjectDetail(project?.id, open)
-  const contentBlocks = data?.contentBlocks ?? []
-  const [activeSlide, setActiveSlide] = useState(0)
-  const [touchStarts, setTouchStarts] = useState<Record<number, number | null>>({})
-  const [isAutoPlayPaused, setIsAutoPlayPaused] = useState(false)
+export function ProjectModal({
+  project,
+  open,
+  onOpenChange,
+}: ProjectModalProps) {
+  const { resolvedTheme } = useTheme();
+  const isDarkMode = resolvedTheme === 'dark';
+
+  const { data, isLoading } = useNotionProjectDetail(project?.id, open);
+  const recordMap = data?.recordMap;
+
+  const [lightboxImage, setLightboxImage] = useState<{
+    src: string;
+    alt?: string;
+    caption?: string;
+  } | null>(null);
+
+  const closeLightbox = useCallback(() => {
+    setLightboxImage(null);
+  }, []);
+
+  const openLightbox = useCallback(
+    (src: string, alt?: string, caption?: string) => {
+      setLightboxImage({ src, alt, caption });
+    },
+    [],
+  );
+
+  const NotionImage = useMemo(() => {
+    return function NotionImageComponent(
+      props: React.ImgHTMLAttributes<HTMLImageElement>,
+    ) {
+      const { src, alt, className, ...rest } = props;
+      const imageSrc = typeof src === 'string' ? src : undefined;
+      if (!imageSrc) {
+        return null;
+      }
+      return (
+        <button
+          type='button'
+          className='notion-image-button'
+          onClick={() => openLightbox(imageSrc, alt)}>
+          <img src={imageSrc} alt={alt ?? ''} className={className} {...rest} />
+        </button>
+      );
+    };
+  }, [openLightbox]);
 
   useEffect(() => {
-    const hasCarousel = contentBlocks.some((block) => block.type === "carousel")
-    if (!hasCarousel || isAutoPlayPaused) {
-      return
+    if (!open) {
+      setLightboxImage(null);
     }
-    const intervalId = window.setInterval(() => {
-      setActiveSlide((prev: number) => prev + 1)
-    }, 4500)
-    return () => window.clearInterval(intervalId)
-  }, [contentBlocks, isAutoPlayPaused])
+  }, [open]);
+
+  if (!open) {
+    return null;
+  }
 
   if (!project) {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-3xl w-[92vw] sm:w-[88vw] max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <Skeleton className="h-7 w-2/3" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-4/5" />
-          </DialogHeader>
-          <div className="flex flex-wrap gap-2">
-            {Array.from({ length: 4 }).map((_, index) => (
-              <Skeleton key={index} className="h-7 w-20" />
-            ))}
-          </div>
-          <div className="space-y-2">
-            {Array.from({ length: 3 }).map((_, index) => (
-              <Skeleton key={index} className="h-4 w-full" />
-            ))}
-          </div>
-          <div className="flex flex-wrap gap-3 pt-2">
-            <Skeleton className="h-10 w-28" />
-            <Skeleton className="h-10 w-24" />
+        <DialogContent
+          className='max-w-none w-[96vw] sm:w-[94vw] md:w-[92vw] lg:w-[88vw] xl:w-[84vw] 2xl:w-[80vw] sm:max-w-[94vw] md:max-w-[90vw] lg:max-w-[80vw] xl:max-w-6xl 2xl:max-w-7xl max-h-[88vh] sm:max-h-[90vh] overflow-hidden p-0 rounded-2xl bg-background/95 backdrop-blur-sm border border-border/50 shadow-2xl'
+          onInteractOutside={(event) => {
+            if (lightboxImage) {
+              event.preventDefault();
+            }
+          }}
+          onPointerDownOutside={(event) => {
+            if (lightboxImage) {
+              event.preventDefault();
+            }
+          }}
+          onEscapeKeyDown={(event) => {
+            if (!lightboxImage) {
+              return;
+            }
+            event.preventDefault();
+            closeLightbox();
+          }}>
+          <div className='modal-scroll overflow-y-auto max-h-[86vh] sm:max-h-[88vh] p-8 sm:p-10 lg:p-14'>
+            <DialogHeader>
+              <Skeleton className='h-8 w-2/3' />
+              <Skeleton className='h-4 w-full' />
+              <Skeleton className='h-4 w-4/5' />
+            </DialogHeader>
+            <div className='flex flex-wrap gap-2 mt-4'>
+              {Array.from({ length: 4 }).map((_, index) => (
+                <Skeleton key={index} className='h-7 w-20' />
+              ))}
+            </div>
+            <div className='space-y-2 mt-6'>
+              {Array.from({ length: 3 }).map((_, index) => (
+                <Skeleton key={index} className='h-4 w-full' />
+              ))}
+            </div>
+            <div className='flex flex-wrap gap-3 pt-6'>
+              <Skeleton className='h-10 w-28' />
+              <Skeleton className='h-10 w-24' />
+            </div>
           </div>
         </DialogContent>
       </Dialog>
-    )
+    );
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-3xl w-[92vw] sm:w-[88vw] max-h-[85vh] overflow-y-auto">
-        <DialogHeader className="space-y-3">
-          <div className="space-y-1">
-            <DialogTitle className="text-2xl">{project.title}</DialogTitle>
-            {project.description && (
-              <DialogDescription className="text-base leading-relaxed">
-                {project.description}
-              </DialogDescription>
+      <DialogContent
+        className='max-w-none w-[96vw] sm:w-[94vw] md:w-[92vw] lg:w-[88vw] xl:w-[84vw] 2xl:w-[80vw] sm:max-w-[94vw] md:max-w-[90vw] lg:max-w-[80vw] xl:max-w-6xl 2xl:max-w-7xl max-h-[88vh] sm:max-h-[90vh] overflow-hidden p-0 rounded-2xl bg-background/95 backdrop-blur-sm border border-border/50 shadow-2xl'
+        onInteractOutside={(event) => {
+          if (lightboxImage) {
+            event.preventDefault();
+          }
+        }}
+        onPointerDownOutside={(event) => {
+          if (lightboxImage) {
+            event.preventDefault();
+          }
+        }}
+        onEscapeKeyDown={(event) => {
+          if (!lightboxImage) {
+            return;
+          }
+          event.preventDefault();
+          closeLightbox();
+        }}>
+        <div className='modal-scroll overflow-y-auto max-h-[86vh] sm:max-h-[88vh] p-8 sm:p-10 lg:p-14'>
+          <DialogHeader className='space-y-6'>
+            <div className='space-y-5'>
+              <DialogTitle className='text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight leading-tight'>
+                {project.title}
+              </DialogTitle>
+              {(project.role || project.client || project.period) && (
+                <div className='space-y-3 text-sm sm:text-base'>
+                  {project.role && (
+                    <div className='flex flex-wrap gap-x-3 gap-y-1'>
+                      <span className='text-muted-foreground'>소속:</span>
+                      <span className='font-medium text-foreground'>
+                        {project.role}
+                      </span>
+                    </div>
+                  )}
+                  {project.client && (
+                    <div className='flex flex-wrap gap-x-3 gap-y-1'>
+                      <span className='text-muted-foreground'>클라이언트:</span>
+                      <span className='text-foreground/80'>
+                        {project.client}
+                      </span>
+                    </div>
+                  )}
+                  {project.period && (
+                    <div className='flex flex-wrap gap-x-3 gap-y-1'>
+                      <span className='text-muted-foreground'>진행기간:</span>
+                      <span className='text-foreground/80 tabular-nums'>
+                        {formatPeriodLabel(project.period)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div className='flex flex-wrap gap-2 pt-3'>
+              {project.techStack.map((tech) => (
+                <Badge
+                  key={tech}
+                  variant='secondary'
+                  className='px-3 py-1 text-sm font-medium'>
+                  {tech}
+                </Badge>
+              ))}
+            </div>
+          </DialogHeader>
+
+          {isLoading ? (
+            <div className='space-y-3 mt-8'>
+              <Skeleton className='h-48 w-full rounded-xl' />
+              {Array.from({ length: 4 }).map((_, index) => (
+                <Skeleton key={index} className='h-4 w-full' />
+              ))}
+            </div>
+          ) : recordMap ? (
+            <div className='mt-8 notion-content'>
+              <NotionRenderer
+                recordMap={recordMap}
+                fullPage={false}
+                darkMode={isDarkMode}
+                components={{ Code, Equation, Image: NotionImage }}
+                disableHeader={true}
+                isImageZoomable={false}
+              />
+            </div>
+          ) : null}
+
+          {lightboxImage && (
+            <div
+              className='notion-lightbox'
+              role='dialog'
+              aria-modal='true'
+              onClick={closeLightbox}>
+              <button
+                type='button'
+                className='notion-lightbox__close'
+                aria-label='이미지 닫기'
+                onClick={(event) => {
+                  event.stopPropagation();
+                  closeLightbox();
+                }}>
+                ×
+              </button>
+              <div
+                className='notion-lightbox__content'
+                onClick={(event) => event.stopPropagation()}>
+                <img
+                  src={lightboxImage.src}
+                  alt={lightboxImage.alt ?? ''}
+                  className='notion-lightbox__image'
+                />
+                {lightboxImage.caption && (
+                  <p className='notion-lightbox__caption'>
+                    {lightboxImage.caption}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          <div className='flex flex-wrap gap-3 pt-6 mt-4 border-t border-border/50'>
+            {project.link && (
+              <Button asChild size='lg'>
+                <a
+                  href={project.link}
+                  target='_blank'
+                  rel='noopener noreferrer'>
+                  프로젝트 보기
+                </a>
+              </Button>
+            )}
+            {project.github && (
+              <Button asChild variant='outline' size='lg'>
+                <a
+                  href={project.github}
+                  target='_blank'
+                  rel='noopener noreferrer'>
+                  GitHub
+                </a>
+              </Button>
             )}
           </div>
-          {(project.client || project.role || project.period) && (
-            <p className="text-sm text-muted-foreground">
-              {project.client || project.role}
-              {project.period ? ` · ${project.period}` : ""}
-            </p>
-          )}
-          <div className="flex flex-wrap gap-2">
-            {project.techStack.map((tech) => (
-              <Badge key={tech} variant="secondary" className="px-3 py-1 text-sm">
-                {tech}
-              </Badge>
-            ))}
-          </div>
-        </DialogHeader>
-
-        {isLoading ? (
-          <div className="space-y-2">
-            {Array.from({ length: 4 }).map((_, index) => (
-              <Skeleton key={index} className="h-4 w-full" />
-            ))}
-          </div>
-        ) : (
-          <div className="space-y-6">
-            {contentBlocks.map((block, index) => {
-              if (block.type === "carousel") {
-                const images = block.images
-                const currentIndex = activeSlide % images.length
-                const currentImage = images[currentIndex]
-                return (
-                  <div key={`carousel-${index}`} className="space-y-3">
-                    <div
-                      className="relative overflow-hidden rounded-xl border border-border bg-card"
-                      onMouseEnter={() => setIsAutoPlayPaused(true)}
-                      onMouseLeave={() => setIsAutoPlayPaused(false)}
-                    >
-                      <img
-                        src={currentImage.url}
-                        alt=""
-                        className="h-[320px] w-full object-cover"
-                        onTouchStart={(event) =>
-                          setTouchStarts((prev) => ({
-                            ...prev,
-                            [index]: event.touches[0].clientX,
-                          }))
-                        }
-                        onTouchStartCapture={() => setIsAutoPlayPaused(true)}
-                        onTouchEndCapture={() => setIsAutoPlayPaused(false)}
-                        onTouchEnd={(event) => {
-                          const touchStart = touchStarts[index] ?? null
-                          if (touchStart === null) {
-                            return
-                          }
-                          const delta = touchStart - event.changedTouches[0].clientX
-                          if (Math.abs(delta) > 50) {
-                            setActiveSlide((prev: number) =>
-                              delta > 0
-                                ? (prev + 1) % images.length
-                                : prev === 0
-                                  ? images.length - 1
-                                  : prev - 1
-                            )
-                          }
-                          setTouchStarts((prev) => ({ ...prev, [index]: null }))
-                          setIsAutoPlayPaused(false)
-                        }}
-                        onTouchCancel={() => setIsAutoPlayPaused(false)}
-                        onTouchMove={() => setIsAutoPlayPaused(true)}
-                      />
-                      {images.length > 1 && (
-                        <div className="absolute inset-0 flex items-center justify-between px-3">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setActiveSlide((prev: number) =>
-                                prev === 0 ? images.length - 1 : prev - 1
-                              )
-                            }
-                            className="rounded-full bg-background/80 p-2 text-foreground shadow-sm"
-                            aria-label="이전 이미지"
-                          >
-                            ‹
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setActiveSlide((prev: number) =>
-                                (prev + 1) % images.length
-                              )
-                            }
-                            className="rounded-full bg-background/80 p-2 text-foreground shadow-sm"
-                            aria-label="다음 이미지"
-                          >
-                            ›
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                    {currentImage.caption && (
-                      <p className="text-sm text-muted-foreground text-center italic max-w-2xl mx-auto">
-                        {currentImage.caption}
-                      </p>
-                    )}
-                    {images.length > 1 && (
-                      <div className="flex items-center justify-center gap-2">
-                        {images.map((_, dotIndex) => (
-                          <span
-                            key={`dot-${dotIndex}`}
-                            className={`h-2 w-2 rounded-full ${
-                              dotIndex === currentIndex
-                                ? "bg-primary"
-                                : "bg-muted"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )
-              }
-
-              return (
-                <div
-                  key={`html-${index}`}
-                  className="prose prose-sm sm:prose-base max-w-none text-foreground [&_h1]:text-2xl [&_h2]:text-xl [&_h2]:mt-8 [&_h3]:text-lg [&_h3]:mt-6 [&_p]:leading-7 [&_p]:text-[15px] [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-4 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-4 [&_li]:my-1.5 [&_hr]:my-8 [&_figure]:my-5 [&_figcaption]:text-sm [&_figcaption]:text-muted-foreground [&_blockquote]:border-l-4 [&_blockquote]:border-primary/40 [&_blockquote]:pl-4 [&_blockquote]:text-muted-foreground [&_pre]:bg-muted [&_pre]:p-4 [&_pre]:rounded-xl [&_code]:font-mono [&_code]:text-sm"
-                  dangerouslySetInnerHTML={{ __html: block.html }}
-                />
-              )
-            })}
-          </div>
-        )}
-
-        <div className="flex flex-wrap gap-3 pt-2">
-          {project.link && (
-            <Button asChild>
-              <a href={project.link} target="_blank" rel="noopener noreferrer">
-                프로젝트 보기
-              </a>
-            </Button>
-          )}
-          {project.github && (
-            <Button asChild variant="outline">
-              <a href={project.github} target="_blank" rel="noopener noreferrer">
-                GitHub
-              </a>
-            </Button>
-          )}
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

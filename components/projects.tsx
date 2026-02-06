@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { AnimatedSection } from "@/components/animated-section"
 import { SectionHeader } from "@/components/section-header"
 import { ProjectModal } from "@/components/project-modal"
@@ -8,20 +8,29 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { ArrowUpRight } from "lucide-react"
 import type { Project } from "@/lib/types"
 import { useNotionProjects } from "@/hooks/use-notion-projects"
+import {
+  fetchProjectDetail,
+  notionProjectDetailQueryKey,
+} from "@/hooks/use-notion-project-detail"
+import { useQueryClient } from "@tanstack/react-query"
 import Image from "next/image"
 
 interface ProjectCardProps {
   project: Project
   index: number
   onSelect: (project: Project) => void
+  onPrefetch: (projectId: string) => void
 }
 
-function ProjectCard({ project, index, onSelect }: ProjectCardProps) {
+function ProjectCard({ project, index, onSelect, onPrefetch }: ProjectCardProps) {
   return (
     <AnimatedSection delay={index * 100}>
       <button
         type="button"
         onClick={() => onSelect(project)}
+        onMouseEnter={() => onPrefetch(project.id)}
+        onFocus={() => onPrefetch(project.id)}
+        onTouchStart={() => onPrefetch(project.id)}
         className="group block w-full text-left bg-card rounded-2xl h-full border border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden"
         aria-label={`${project.title} 상세 보기`}
       >
@@ -101,6 +110,7 @@ export function Projects() {
   const otherProjects = projectList.filter((p) => p.category === "other")
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const queryClient = useQueryClient()
 
   const handleOpen = (project: Project) => {
     setSelectedProject(project)
@@ -113,6 +123,17 @@ export function Projects() {
       setSelectedProject(null)
     }
   }
+
+  const handlePrefetch = useCallback(
+    (projectId: string) => {
+      queryClient.prefetchQuery({
+        queryKey: notionProjectDetailQueryKey(projectId),
+        queryFn: () => fetchProjectDetail(projectId),
+        staleTime: 1000 * 60 * 5,
+      })
+    },
+    [queryClient]
+  )
 
   return (
     <section id="projects" className="py-20 md:py-28 px-5 md:px-10 lg:px-20 xl:px-28 2xl:px-36 bg-secondary/30">
@@ -135,6 +156,7 @@ export function Projects() {
                   project={project}
                   index={index}
                   onSelect={handleOpen}
+                  onPrefetch={handlePrefetch}
                 />
               ))}
         </div>
@@ -155,6 +177,7 @@ export function Projects() {
                   project={project}
                   index={index}
                   onSelect={handleOpen}
+                  onPrefetch={handlePrefetch}
                 />
               ))}
             </div>
