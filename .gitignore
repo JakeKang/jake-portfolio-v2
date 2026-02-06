@@ -26,7 +26,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-PORTFOLIO_RESTRUCTURE_PLAN.md
-
 *storybook.log
 storybook-static
+
+# etc
+lighthouse-report.json
+/documents/
+.DS_Store

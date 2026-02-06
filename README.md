@@ -34,7 +34,6 @@ Next.js 16 기반의 현대적인 포트폴리오 웹사이트입니다.
 │   ├── header.tsx        # 헤더/네비게이션
 │   ├── hero.tsx          # 히어로 섹션
 │   ├── projects.tsx      # 프로젝트 섹션
-│   └── skills.tsx        # 기술 스택 섹션
 ├── hooks/                # 커스텀 훅
 ├── lib/
 │   ├── data.ts           # 포트폴리오 데이터
@@ -89,9 +88,8 @@ pnpm start
 
 `public/` 폴더의 이미지를 교체하세요:
 
-- `profile.jpg`: 프로필 사진
-- `icon.svg`, `icon-*.png`: 파비콘
-- `apple-icon.png`: Apple 터치 아이콘
+- `profile.png`: 프로필 사진
+- `icon.svg`: 파비콘
 
 ### 스타일 수정
 

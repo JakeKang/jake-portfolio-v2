@@ -10,13 +10,21 @@ import {
 } from "@/components/ui/accordion"
 import { faqs } from "@/lib/data"
 
-const formatFaqAnswer = (value: string) => {
-  const html = value
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\n/g, '<br />')
+const renderBoldSegments = (value: string) =>
+  value.split(/(\*\*[^*]+\*\*)/g).map((segment, index) => {
+    if (segment.startsWith('**') && segment.endsWith('**')) {
+      return <strong key={`bold-${index}`}>{segment.slice(2, -2)}</strong>
+    }
+    return <span key={`text-${index}`}>{segment}</span>
+  })
 
-  return { __html: html }
-}
+const renderFaqAnswer = (value: string) =>
+  value.split('\n').map((line, index, lines) => (
+    <span key={`line-${index}`}>
+      {renderBoldSegments(line)}
+      {index < lines.length - 1 && <br />}
+    </span>
+  ))
 
 export function FAQ() {
   return (
@@ -42,10 +50,9 @@ export function FAQ() {
                   {faq.question}
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground pb-5 leading-relaxed text-[15px]">
-                  <pre
-                    className="whitespace-pre-wrap font-sans text-[15px] leading-relaxed"
-                    dangerouslySetInnerHTML={formatFaqAnswer(faq.answer)}
-                  />
+                  <div className="whitespace-pre-wrap font-sans text-[15px] leading-relaxed">
+                    {renderFaqAnswer(faq.answer)}
+                  </div>
                 </AccordionContent>
               </AccordionItem>
             ))}

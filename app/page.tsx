@@ -1,7 +1,6 @@
 import { Header } from "@/components/header"
 import { Hero } from "@/components/hero"
 import { About } from "@/components/about"
-// import { Skills } from "@/components/skills" // Hidden - backup at components/_backup/skills.backup.tsx
 import { Projects } from "@/components/projects"
 import { Experience } from "@/components/experience"
 import { Activities } from "@/components/activities"
@@ -17,7 +16,6 @@ export default function Home() {
       <main>
         <Hero />
         <About />
-        {/* <Skills /> */}
         <Projects />
         <Experience />
         <Activities />

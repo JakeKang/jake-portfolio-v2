@@ -14,6 +14,7 @@ import {
 import { Button } from '@/components/ui/button';
 import type { Project } from '@/lib/types';
 import { useNotionProjectDetail } from '@/hooks/use-notion-project-detail';
+import Image from 'next/image';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'next-themes';
 
@@ -77,17 +78,32 @@ export function ProjectModal({
     return function NotionImageComponent(
       props: React.ImgHTMLAttributes<HTMLImageElement>,
     ) {
-      const { src, alt, className, ...rest } = props;
+      const { src, alt, className, width, height } = props;
       const imageSrc = typeof src === 'string' ? src : undefined;
+      const parsedWidth = typeof width === 'number' ? width : Number(width);
+      const parsedHeight = typeof height === 'number' ? height : Number(height);
+
       if (!imageSrc) {
         return null;
       }
+
       return (
         <button
           type='button'
           className='notion-image-button'
           onClick={() => openLightbox(imageSrc, alt)}>
-          <img src={imageSrc} alt={alt ?? ''} className={className} {...rest} />
+          <Image
+            src={imageSrc}
+            alt={alt ?? ''}
+            width={Number.isFinite(parsedWidth) && parsedWidth > 0 ? parsedWidth : 1600}
+            height={
+              Number.isFinite(parsedHeight) && parsedHeight > 0 ? parsedHeight : 900
+            }
+            className={className}
+            sizes='100vw'
+            unoptimized
+            style={{ width: '100%', height: 'auto' }}
+          />
         </button>
       );
     };
@@ -263,10 +279,15 @@ export function ProjectModal({
               <div
                 className='notion-lightbox__content'
                 onClick={(event) => event.stopPropagation()}>
-                <img
+                <Image
                   src={lightboxImage.src}
                   alt={lightboxImage.alt ?? ''}
+                  width={1600}
+                  height={900}
                   className='notion-lightbox__image'
+                  sizes='100vw'
+                  unoptimized
+                  style={{ width: '100%', height: 'auto' }}
                 />
                 {lightboxImage.caption && (
                   <p className='notion-lightbox__caption'>
