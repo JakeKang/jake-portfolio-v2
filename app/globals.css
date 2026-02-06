@@ -123,6 +123,9 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-foreground;
   }
@@ -194,6 +197,17 @@
   }
 }
 
+@keyframes hero-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .hero-grid-bg {
   background-image: linear-gradient(
       to right,
@@ -243,6 +257,14 @@
   border-radius: 999px;
   background: rgba(45, 74, 62, 0.35);
   animation: hero-scroll 1.8s ease-in-out infinite;
+}
+
+.hero-reveal {
+  animation: hero-reveal 700ms ease-out both;
+}
+
+.hero-reveal-delay {
+  animation-delay: 120ms;
 }
 
 .animate-subtitle-slide {

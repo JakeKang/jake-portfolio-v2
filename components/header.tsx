@@ -58,7 +58,6 @@ export function Header() {
           </ul>
           <ThemeToggle className="h-9 w-9" />
         </div>
-
         <div className="flex items-center gap-2 md:hidden">
           <ThemeToggle className="h-9 w-9" />
           <button
@@ -75,8 +74,6 @@ export function Header() {
           </button>
         </div>
       </nav>
-
-      {/* Mobile Navigation */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-background/95 backdrop-blur-md border-b border-border">
           <ul className="px-6 py-4 space-y-4">
