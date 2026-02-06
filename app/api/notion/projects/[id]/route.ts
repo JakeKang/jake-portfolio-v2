@@ -10,8 +10,10 @@ const recordCache = new Map<
   { recordMap: ExtendedRecordMap; expiresAt: number }
 >()
 
+export const revalidate = 300
+
 const cacheHeaders = {
-  "Cache-Control": "s-maxage=300, stale-while-revalidate=900",
+  "Cache-Control": "public, s-maxage=300, stale-while-revalidate=900",
 }
 
 export async function GET(

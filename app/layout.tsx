@@ -11,6 +11,19 @@ export const metadata: Metadata = {
   title: '프론트엔드 개발자 포트폴리오',
   description: '프로덕트 마인드를 가진 프론트엔드 개발자. 5년간 사용자 중심의 웹 애플리케이션을 구축해왔습니다.',
   generator: 'v0.app',
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+      noimageindex: true,
+      'max-snippet': -1,
+      'max-image-preview': 'none',
+      'max-video-preview': -1,
+    },
+  },
   icons: {
     icon: [
       {
@@ -38,6 +51,8 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
           as="style"

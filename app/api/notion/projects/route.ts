@@ -2,8 +2,11 @@ import { NextResponse } from "next/server"
 import { projects as localProjects } from "@/lib/data"
 import { fetchProjectsFromNotion } from "@/lib/notion"
 
+export const revalidate = 600
+export const dynamic = "force-static"
+
 const cacheHeaders = {
-  "Cache-Control": "s-maxage=600, stale-while-revalidate=3600",
+  "Cache-Control": "public, s-maxage=600, stale-while-revalidate=3600",
 }
 
 export async function GET() {

@@ -93,11 +93,15 @@ export function ProjectModal({
     };
   }, [openLightbox]);
 
-  useEffect(() => {
-    if (!open) {
-      setLightboxImage(null);
-    }
-  }, [open]);
+  const handleOpenChange = useCallback(
+    (nextOpen: boolean) => {
+      if (!nextOpen) {
+        setLightboxImage(null);
+      }
+      onOpenChange(nextOpen);
+    },
+    [onOpenChange],
+  );
 
   if (!open) {
     return null;
@@ -105,7 +109,7 @@ export function ProjectModal({
 
   if (!project) {
     return (
-      <Dialog open={open} onOpenChange={onOpenChange}>
+      <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent
           className='max-w-none w-[96vw] sm:w-[94vw] md:w-[92vw] lg:w-[88vw] xl:w-[84vw] 2xl:w-[80vw] sm:max-w-[94vw] md:max-w-[90vw] lg:max-w-[80vw] xl:max-w-6xl 2xl:max-w-7xl max-h-[88vh] sm:max-h-[90vh] overflow-hidden p-0 rounded-2xl bg-background/95 backdrop-blur-sm border border-border/50 shadow-2xl'
           onInteractOutside={(event) => {
@@ -152,7 +156,7 @@ export function ProjectModal({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent
         className='max-w-none w-[96vw] sm:w-[94vw] md:w-[92vw] lg:w-[88vw] xl:w-[84vw] 2xl:w-[80vw] sm:max-w-[94vw] md:max-w-[90vw] lg:max-w-[80vw] xl:max-w-6xl 2xl:max-w-7xl max-h-[88vh] sm:max-h-[90vh] overflow-hidden p-0 rounded-2xl bg-background/95 backdrop-blur-sm border border-border/50 shadow-2xl'
         onInteractOutside={(event) => {
