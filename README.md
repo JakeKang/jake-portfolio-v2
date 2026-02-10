@@ -94,7 +94,7 @@ pnpm start
 
 `public/` 폴더의 이미지를 교체하세요:
 
-- `profile.png`: 프로필 사진
+- `profile.webp`: 프로필 사진
 - `icon.svg`: 파비콘
 
 ### 스타일 수정

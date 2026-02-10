@@ -42,7 +42,7 @@ export function Hero() {
             <div className='relative'>
               <div className='w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden bg-secondary ring-4 ring-card shadow-lg'>
                 <Image
-                  src='/profile.png'
+                  src='/profile.webp'
                   alt='프로필 사진'
                   width={160}
                   height={160}

@@ -3,6 +3,7 @@
 import 'react-notion-x/src/styles.css';
 import 'prismjs/themes/prism-tomorrow.css';
 import 'katex/dist/katex.min.css';
+import './project-modal.css';
 
 import dynamic from 'next/dynamic';
 import { NotionRenderer } from 'react-notion-x';
@@ -25,6 +26,13 @@ import { useTheme } from 'next-themes';
 // Lazy load heavy components for better performance
 const Code = dynamic(
   () => import('react-notion-x/build/third-party/code').then((m) => m.Code),
+  { ssr: false },
+);
+const Collection = dynamic(
+  () =>
+    import('react-notion-x/build/third-party/collection').then(
+      (m) => m.Collection,
+    ),
   { ssr: false },
 );
 const Equation = dynamic(
@@ -268,7 +276,7 @@ export function ProjectModal({
                 recordMap={recordMap}
                 fullPage={false}
                 darkMode={isDarkMode}
-                components={{ Code, Equation, Image: NotionImage }}
+                components={{ Code, Collection, Equation, Image: NotionImage }}
                 disableHeader={true}
                 isImageZoomable={false}
               />
