@@ -11,6 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
@@ -154,6 +155,10 @@ export function ProjectModal({
           }}>
           <div className='modal-scroll overflow-y-auto max-h-[86vh] sm:max-h-[88vh] p-8 sm:p-10 lg:p-14'>
             <DialogHeader>
+              <DialogTitle className='sr-only'>프로젝트 상세 정보</DialogTitle>
+              <DialogDescription className='sr-only'>
+                프로젝트 정보를 불러오는 중입니다.
+              </DialogDescription>
               <Skeleton className='h-8 w-2/3' />
               <Skeleton className='h-4 w-full' />
               <Skeleton className='h-4 w-4/5' />
@@ -205,6 +210,9 @@ export function ProjectModal({
               <DialogTitle className='text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight leading-tight'>
                 {project.title}
               </DialogTitle>
+              <DialogDescription className='sr-only'>
+                프로젝트 상세 설명, 사용 기술, 기간, 관련 링크를 확인할 수 있습니다.
+              </DialogDescription>
               {(project.role || project.client || project.period) && (
                 <div className='space-y-3 text-sm sm:text-base'>
                   {project.role && (
