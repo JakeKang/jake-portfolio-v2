@@ -4,11 +4,19 @@ import localFont from 'next/font/local';
 import Script from 'next/script';
 import { Providers } from '@/app/providers';
 import './globals.css';
-import 'react-notion-x/src/styles.css';
-import 'prismjs/themes/prism-tomorrow.css';
-import 'katex/dist/katex.min.css';
+
+const metadataBaseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  process.env.SITE_URL ??
+  'http://localhost:3000';
+
+const normalizedMetadataBaseUrl =
+  metadataBaseUrl.startsWith('http://') || metadataBaseUrl.startsWith('https://')
+    ? metadataBaseUrl
+    : `https://${metadataBaseUrl}`;
 
 export const metadata: Metadata = {
+  metadataBase: new URL(normalizedMetadataBaseUrl),
   title: 'JakeKang포트폴리오',
   description: '사용자 중심의 경험을 설계하고 구현하는 프론트엔드 개발자 포트폴리오.',
   robots: {
@@ -59,22 +67,22 @@ export const metadata: Metadata = {
 const pretendard = localFont({
   src: [
     {
-      path: '../public/fonts/Pretendard-Regular.woff2',
+      path: '../public/fonts/Pretendard-Regular.subset.woff2',
       weight: '400',
       style: 'normal',
     },
     {
-      path: '../public/fonts/Pretendard-Medium.woff2',
+      path: '../public/fonts/Pretendard-Medium.subset.woff2',
       weight: '500',
       style: 'normal',
     },
     {
-      path: '../public/fonts/Pretendard-SemiBold.woff2',
+      path: '../public/fonts/Pretendard-SemiBold.subset.woff2',
       weight: '600',
       style: 'normal',
     },
     {
-      path: '../public/fonts/Pretendard-Bold.woff2',
+      path: '../public/fonts/Pretendard-Bold.subset.woff2',
       weight: '700',
       style: 'normal',
     },
@@ -90,15 +98,27 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ko' suppressHydrationWarning>
-      <head />
+      <head>
+        <link
+          rel='preconnect'
+          href='https://prod-files-secure.s3.us-west-2.amazonaws.com'
+          crossOrigin=''
+        />
+        <link
+          rel='dns-prefetch'
+          href='https://prod-files-secure.s3.us-west-2.amazonaws.com'
+        />
+        <link rel='preconnect' href='https://www.googletagmanager.com' />
+        <link rel='dns-prefetch' href='https://www.googletagmanager.com' />
+      </head>
       <body
         className={`${pretendard.variable} font-sans antialiased bg-background text-foreground`}>
         <Providers>{children}</Providers>
         <Script
           src='https://www.googletagmanager.com/gtag/js?id=G-3GBK56C1XR'
-          strategy='afterInteractive'
+          strategy='lazyOnload'
         />
-        <Script id='ga-init' strategy='afterInteractive'>
+        <Script id='ga-init' strategy='lazyOnload'>
           {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());

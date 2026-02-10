@@ -1,5 +1,9 @@
 'use client';
 
+import 'react-notion-x/src/styles.css';
+import 'prismjs/themes/prism-tomorrow.css';
+import 'katex/dist/katex.min.css';
+
 import dynamic from 'next/dynamic';
 import { NotionRenderer } from 'react-notion-x';
 import { Badge } from '@/components/ui/badge';
@@ -7,7 +11,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
@@ -15,7 +18,7 @@ import { Button } from '@/components/ui/button';
 import type { Project } from '@/lib/types';
 import { useNotionProjectDetail } from '@/hooks/use-notion-project-detail';
 import Image from 'next/image';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTheme } from 'next-themes';
 
 // Lazy load heavy components for better performance
@@ -34,6 +37,10 @@ interface ProjectModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
+
+const TAG_SKELETON_KEYS = ['tag-1', 'tag-2', 'tag-3', 'tag-4'];
+const LINE_SKELETON_KEYS = ['line-1', 'line-2', 'line-3'];
+const DETAIL_LINE_SKELETON_KEYS = ['detail-1', 'detail-2', 'detail-3', 'detail-4'];
 
 function formatPeriodLabel(period?: string) {
   if (!period) {
@@ -152,13 +159,13 @@ export function ProjectModal({
               <Skeleton className='h-4 w-4/5' />
             </DialogHeader>
             <div className='flex flex-wrap gap-2 mt-4'>
-              {Array.from({ length: 4 }).map((_, index) => (
-                <Skeleton key={index} className='h-7 w-20' />
+              {TAG_SKELETON_KEYS.map((key) => (
+                <Skeleton key={key} className='h-7 w-20' />
               ))}
             </div>
             <div className='space-y-2 mt-6'>
-              {Array.from({ length: 3 }).map((_, index) => (
-                <Skeleton key={index} className='h-4 w-full' />
+              {LINE_SKELETON_KEYS.map((key) => (
+                <Skeleton key={key} className='h-4 w-full' />
               ))}
             </div>
             <div className='flex flex-wrap gap-3 pt-6'>
@@ -243,8 +250,8 @@ export function ProjectModal({
           {isLoading ? (
             <div className='space-y-3 mt-8'>
               <Skeleton className='h-48 w-full rounded-xl' />
-              {Array.from({ length: 4 }).map((_, index) => (
-                <Skeleton key={index} className='h-4 w-full' />
+              {DETAIL_LINE_SKELETON_KEYS.map((key) => (
+                <Skeleton key={key} className='h-4 w-full' />
               ))}
             </div>
           ) : recordMap ? (
@@ -265,7 +272,16 @@ export function ProjectModal({
               className='notion-lightbox'
               role='dialog'
               aria-modal='true'
-              onClick={closeLightbox}>
+              onClick={(event) => {
+                if (event.target === event.currentTarget) {
+                  closeLightbox();
+                }
+              }}
+              onKeyDown={(event) => {
+                if (event.key === 'Escape') {
+                  closeLightbox();
+                }
+              }}>
               <button
                 type='button'
                 className='notion-lightbox__close'
@@ -277,8 +293,7 @@ export function ProjectModal({
                 ×
               </button>
               <div
-                className='notion-lightbox__content'
-                onClick={(event) => event.stopPropagation()}>
+                className='notion-lightbox__content'>
                 <Image
                   src={lightboxImage.src}
                   alt={lightboxImage.alt ?? ''}

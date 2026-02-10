@@ -34,7 +34,7 @@ export function ProjectCard({
               alt={project.title}
               fill
               className="object-cover"
-              sizes="(min-width: 1024px) 50vw, 100vw"
+              sizes="(min-width: 1280px) 560px, (min-width: 768px) 50vw, 100vw"
               loading="lazy"
             />
           ) : (

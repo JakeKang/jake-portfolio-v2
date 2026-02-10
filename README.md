@@ -4,16 +4,15 @@ Next.js 16 기반의 현대적인 포트폴리오 웹사이트입니다.
 
 ## 기술 스택
 
-| 분류 | 기술 |
-|------|------|
-| **Framework** | Next.js 16.0.10 (App Router) |
-| **Language** | TypeScript 5 |
-| **UI Library** | React 19.2.0 |
-| **Styling** | Tailwind CSS 4.1.9 |
-| **Component** | shadcn/ui (Radix UI) |
-| **Form** | React Hook Form + Zod |
-| **Analytics** | Vercel Analytics |
-| **Font** | Pretendard Variable |
+| 분류           | 기술                         |
+| -------------- | ---------------------------- |
+| **Framework**  | Next.js 16.0.10 (App Router) |
+| **Language**   | TypeScript 5                 |
+| **UI Library** | React 19.2.0                 |
+| **Styling**    | Tailwind CSS 4.1.9           |
+| **Component**  | shadcn/ui (Radix UI)         |
+| **Analytics**  | Vercel Analytics             |
+| **Font**       | Pretendard Subset (WOFF2)    |
 
 ## 프로젝트 구조
 
@@ -40,8 +39,15 @@ Next.js 16 기반의 현대적인 포트폴리오 웹사이트입니다.
 │   ├── types.ts          # TypeScript 타입 정의
 │   └── utils.ts          # 유틸리티 함수
 ├── public/               # 정적 파일 (이미지, 아이콘)
-└── styles/               # 추가 스타일
 ```
+
+## 최신 최적화 (2026-02-10)
+
+- Notion 이미지 403 이슈 해결: `/api/notion/projects`를 `force-dynamic` + 인메모리 캐시(10분)로 전환
+- 폰트 최적화: `public/fonts/*.subset.woff2`만 사용하도록 전환 및 기존 full woff2 제거
+- 초기 렌더 경량화: Notion 전용 CSS(`react-notion-x`, `prismjs`, `katex`)를 모달 컴포넌트로 이동
+- 코드 정리: 미사용 `components/ui/*`, `hooks/use-toast.ts`, `styles/globals.css` 제거
+- Storybook 안정화: `.storybook/preview.ts`에 `QueryClientProvider` 데코레이터 적용
 
 ## 시작하기
 
@@ -98,26 +104,30 @@ pnpm start
 
 ## 스크립트
 
-| 명령어 | 설명 |
-|--------|------|
-| `pnpm dev` | 개발 서버 실행 |
-| `pnpm build` | 프로덕션 빌드 |
+| 명령어       | 설명               |
+| ------------ | ------------------ |
+| `pnpm dev`   | 개발 서버 실행     |
+| `pnpm build` | 프로덕션 빌드      |
 | `pnpm start` | 프로덕션 서버 실행 |
-| `pnpm lint` | ESLint 실행 |
+| `pnpm lint`  | ESLint 실행        |
 
 ## 성능/보안/캐싱
 
 ### Notion 캐싱
+
 - `/api/notion/projects`: `force-dynamic` + 인메모리 캐시(10분) + `Cache-Control: no-store`
 - `/api/notion/projects/[id]`: `revalidate=300` + 인메모리 캐시(5분)
 
 ### SEO 차단 (비공개 포트폴리오)
+
 - `app/robots.ts`에서 전체 크롤러 차단
 - `app/layout.tsx`의 `metadata.robots`로 noindex/noarchive 설정
 - `next.config.mjs`에서 `X-Robots-Tag` 헤더 적용
 
 ### 보안 헤더
+
 `next.config.mjs`에 기본 보안 헤더를 추가했습니다:
+
 - `X-Frame-Options: DENY`
 - `X-Content-Type-Options: nosniff`
 - `Referrer-Policy: strict-origin-when-cross-origin`
@@ -125,6 +135,7 @@ pnpm start
 - `Strict-Transport-Security` (HTTPS)
 
 ### Lighthouse 성능 테스트
+
 ```bash
 pnpm build
 pnpm start -p 3000
@@ -145,9 +156,7 @@ npx lighthouse http://localhost:3000 --output=json --output-path=./lighthouse-re
 
 ## 배포
 
-Vercel에서 바로 배포할 수 있습니다:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
+개인 서버 PM2 환경 또는 Vercel에 배포할 수 있습니다.
 
 ## 라이선스
 

@@ -48,6 +48,9 @@ export function Hero() {
                   height={160}
                   className='w-full h-full object-cover'
                   priority
+                  fetchPriority='high'
+                  sizes='160px'
+                  unoptimized
                 />
               </div>
               <div className='absolute -bottom-2 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-medium shadow-md whitespace-nowrap overflow-hidden'>

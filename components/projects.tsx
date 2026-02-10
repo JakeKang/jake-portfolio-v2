@@ -1,8 +1,8 @@
 "use client"
 
 import { useCallback, useState } from "react"
+import dynamic from "next/dynamic"
 import { SectionHeader } from "@/components/section-header"
-import { ProjectModal } from "@/components/project-modal"
 import { ProjectCard } from "@/components/cards/project-card"
 import { ProjectCardSkeleton } from "@/components/cards/project-card-skeleton"
 import type { Project } from "@/lib/types"
@@ -12,6 +12,13 @@ import {
   notionProjectDetailQueryKey,
 } from "@/hooks/use-notion-project-detail"
 import { useQueryClient } from "@tanstack/react-query"
+
+const PROJECT_SKELETON_KEYS = ["skeleton-1", "skeleton-2", "skeleton-3", "skeleton-4"]
+
+const ProjectModal = dynamic(
+  () => import("@/components/project-modal").then((mod) => mod.ProjectModal),
+  { ssr: false }
+)
 
 export function Projects() {
   const { data, isLoading } = useNotionProjects()
@@ -57,8 +64,8 @@ export function Projects() {
 
         <div className="grid md:grid-cols-2 gap-5 md:gap-6 xl:gap-8">
           {isLoading
-            ? Array.from({ length: 4 }).map((_, index) => (
-                <ProjectCardSkeleton key={index} index={index} />
+            ? PROJECT_SKELETON_KEYS.map((key, index) => (
+                <ProjectCardSkeleton key={key} index={index} />
               ))
             : featuredProjects.map((project, index) => (
                 <ProjectCard
@@ -101,11 +108,13 @@ export function Projects() {
         )}
       </div>
 
-      <ProjectModal
-        project={selectedProject}
-        open={isModalOpen}
-        onOpenChange={handleOpenChange}
-      />
+      {isModalOpen && (
+        <ProjectModal
+          project={selectedProject}
+          open={isModalOpen}
+          onOpenChange={handleOpenChange}
+        />
+      )}
     </section>
   )
 }
