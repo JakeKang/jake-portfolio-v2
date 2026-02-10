@@ -6,7 +6,9 @@ interface ProjectDetailResponse {
 }
 
 export async function fetchProjectDetail(projectId: string) {
-  const response = await fetch(`/api/notion/projects/${projectId}`)
+  const response = await fetch(`/api/notion/projects/${projectId}`, {
+    cache: "no-store",
+  })
   if (!response.ok) {
     throw new Error("Failed to fetch project detail")
   }

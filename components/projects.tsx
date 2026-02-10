@@ -1,8 +1,8 @@
 "use client"
 
 import { useCallback, useState } from "react"
-import dynamic from "next/dynamic"
 import { SectionHeader } from "@/components/section-header"
+import { ProjectModal } from "@/components/project-modal"
 import { ProjectCard } from "@/components/cards/project-card"
 import { ProjectCardSkeleton } from "@/components/cards/project-card-skeleton"
 import type { Project } from "@/lib/types"
@@ -14,11 +14,6 @@ import {
 import { useQueryClient } from "@tanstack/react-query"
 
 const PROJECT_SKELETON_KEYS = ["skeleton-1", "skeleton-2", "skeleton-3", "skeleton-4"]
-
-const ProjectModal = dynamic(
-  () => import("@/components/project-modal").then((mod) => mod.ProjectModal),
-  { ssr: false }
-)
 
 export function Projects() {
   const { data, isLoading } = useNotionProjects()

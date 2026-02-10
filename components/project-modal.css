@@ -161,14 +161,12 @@
 }
 
 .notion-content .notion-code {
-  background: var(--secondary);
   border: 1px solid var(--border);
   border-radius: 0.75rem;
   font-family: var(--font-mono);
 }
 
 .notion-content .notion-inline-code {
-  background: var(--secondary);
   color: var(--primary);
   padding: 0.2em 0.4em;
   border-radius: 0.25rem;

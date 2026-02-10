@@ -12,6 +12,13 @@ const dirname =
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
+  optimizeDeps: {
+    include: [
+      'react-notion-x/build/third-party/code',
+      'react-notion-x/build/third-party/collection',
+      'react-notion-x/build/third-party/equation',
+    ],
+  },
   test: {
     projects: [
       {

@@ -7,6 +7,7 @@ import './project-modal.css';
 
 import dynamic from 'next/dynamic';
 import { NotionRenderer } from 'react-notion-x';
+import { Collection } from 'react-notion-x/build/third-party/collection';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -28,13 +29,6 @@ const Code = dynamic(
   () => import('react-notion-x/build/third-party/code').then((m) => m.Code),
   { ssr: false },
 );
-const Collection = dynamic(
-  () =>
-    import('react-notion-x/build/third-party/collection').then(
-      (m) => m.Collection,
-    ),
-  { ssr: false },
-);
 const Equation = dynamic(
   () =>
     import('react-notion-x/build/third-party/equation').then((m) => m.Equation),
@@ -49,18 +43,12 @@ interface ProjectModalProps {
 
 const TAG_SKELETON_KEYS = ['tag-1', 'tag-2', 'tag-3', 'tag-4'];
 const LINE_SKELETON_KEYS = ['line-1', 'line-2', 'line-3'];
-const DETAIL_LINE_SKELETON_KEYS = ['detail-1', 'detail-2', 'detail-3', 'detail-4'];
-
-function formatPeriodLabel(period?: string) {
-  if (!period) {
-    return '';
-  }
-  return period
-    .replace(/\./g, '-')
-    .replace(/\s*~\s*/g, ' ~ ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
+const DETAIL_LINE_SKELETON_KEYS = [
+  'detail-1',
+  'detail-2',
+  'detail-3',
+  'detail-4',
+];
 
 export function ProjectModal({
   project,
@@ -111,9 +99,15 @@ export function ProjectModal({
           <Image
             src={imageSrc}
             alt={alt ?? ''}
-            width={Number.isFinite(parsedWidth) && parsedWidth > 0 ? parsedWidth : 1600}
+            width={
+              Number.isFinite(parsedWidth) && parsedWidth > 0
+                ? parsedWidth
+                : 1600
+            }
             height={
-              Number.isFinite(parsedHeight) && parsedHeight > 0 ? parsedHeight : 900
+              Number.isFinite(parsedHeight) && parsedHeight > 0
+                ? parsedHeight
+                : 900
             }
             className={className}
             sizes='100vw'
@@ -213,65 +207,27 @@ export function ProjectModal({
           closeLightbox();
         }}>
         <div className='modal-scroll overflow-y-auto max-h-[86vh] sm:max-h-[88vh] p-8 sm:p-10 lg:p-14'>
-          <DialogHeader className='space-y-6'>
+          <DialogHeader className='space-y-4'>
             <div className='space-y-5'>
               <DialogTitle className='text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight leading-tight'>
                 {project.title}
               </DialogTitle>
               <DialogDescription className='sr-only'>
-                프로젝트 상세 설명, 사용 기술, 기간, 관련 링크를 확인할 수 있습니다.
+                프로젝트 상세 설명, 사용 기술, 기간, 관련 링크를 확인할 수
+                있습니다.
               </DialogDescription>
-              {(project.role || project.client || project.period) && (
-                <div className='space-y-3 text-sm sm:text-base'>
-                  {project.role && (
-                    <div className='flex flex-wrap gap-x-3 gap-y-1'>
-                      <span className='text-muted-foreground'>소속:</span>
-                      <span className='font-medium text-foreground'>
-                        {project.role}
-                      </span>
-                    </div>
-                  )}
-                  {project.client && (
-                    <div className='flex flex-wrap gap-x-3 gap-y-1'>
-                      <span className='text-muted-foreground'>클라이언트:</span>
-                      <span className='text-foreground/80'>
-                        {project.client}
-                      </span>
-                    </div>
-                  )}
-                  {project.period && (
-                    <div className='flex flex-wrap gap-x-3 gap-y-1'>
-                      <span className='text-muted-foreground'>진행기간:</span>
-                      <span className='text-foreground/80 tabular-nums'>
-                        {formatPeriodLabel(project.period)}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            <div className='flex flex-wrap gap-2 pt-3'>
-              {project.techStack.map((tech) => (
-                <Badge
-                  key={tech}
-                  variant='secondary'
-                  className='px-3 py-1 text-sm font-medium'>
-                  {tech}
-                </Badge>
-              ))}
             </div>
           </DialogHeader>
 
           {isLoading ? (
-            <div className='space-y-3 mt-8'>
+            <div className='space-y-3 mt-4'>
               <Skeleton className='h-48 w-full rounded-xl' />
               {DETAIL_LINE_SKELETON_KEYS.map((key) => (
                 <Skeleton key={key} className='h-4 w-full' />
               ))}
             </div>
           ) : recordMap ? (
-            <div className='mt-8 notion-content'>
+            <div className='mt-4 notion-content'>
               <NotionRenderer
                 recordMap={recordMap}
                 fullPage={false}
@@ -308,8 +264,7 @@ export function ProjectModal({
                 }}>
                 ×
               </button>
-              <div
-                className='notion-lightbox__content'>
+              <div className='notion-lightbox__content'>
                 <Image
                   src={lightboxImage.src}
                   alt={lightboxImage.alt ?? ''}
