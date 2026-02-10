@@ -108,7 +108,7 @@ pnpm start
 ## 성능/보안/캐싱
 
 ### Notion 캐싱
-- `/api/notion/projects`: `revalidate=600` + CDN 캐시 헤더
+- `/api/notion/projects`: `force-dynamic` + 인메모리 캐시(10분) + `Cache-Control: no-store`
 - `/api/notion/projects/[id]`: `revalidate=300` + 인메모리 캐시(5분)
 
 ### SEO 차단 (비공개 포트폴리오)
@@ -130,6 +130,18 @@ pnpm build
 pnpm start -p 3000
 npx lighthouse http://localhost:3000 --output=json --output-path=./lighthouse-report.json --only-categories=performance --chrome-flags="--headless"
 ```
+
+## 이슈 트래킹
+
+### [해결] Notion 커버 이미지 403 에러 (2025-02-10)
+
+**증상**: 페이지 첫 진입 시 프로젝트 카드의 Notion 커버 이미지가 `403 Forbidden` 에러 발생. 프로젝트 모달 내부 이미지는 정상 로드.
+
+**원인**: Notion `file` 타입 커버 이미지는 signed S3 URL(`prod-files-secure.s3.us-west-2.amazonaws.com`)로 약 1시간 후 만료됨. `/api/notion/projects` 라우트가 `force-static`으로 설정되어 빌드 시점의 URL이 고정 → 만료 후 403 발생. 모달은 열릴 때마다 `notion-client`로 fresh 데이터를 요청하므로 정상 동작.
+
+**해결**: `/api/notion/projects/route.ts`를 `force-static` → `force-dynamic`으로 변경하고, 서버 인메모리 캐시(TTL 10분)를 적용하여 매 요청마다 fresh한 signed URL을 반환하도록 수정. 응답 헤더를 `Cache-Control: no-store`로 설정하여 CDN/브라우저가 만료된 URL을 캐싱하지 않도록 함.
+
+**변경 파일**: `app/api/notion/projects/route.ts`
 
 ## 배포
 

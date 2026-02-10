@@ -1,29 +1,43 @@
 import { NextResponse } from "next/server"
 import { projects as localProjects } from "@/lib/data"
 import { fetchProjectsFromNotion } from "@/lib/notion"
+import type { Project } from "@/lib/types"
 
-export const revalidate = 600
-export const dynamic = "force-static"
+export const dynamic = "force-dynamic"
 
-const cacheHeaders = {
-  "Cache-Control": "public, s-maxage=600, stale-while-revalidate=3600",
-}
+const CACHE_TTL = 1000 * 60 * 10 // 10 minutes
+let projectsCache: {
+  data: Project[]
+  source: string
+  expiresAt: number
+} | null = null
 
-export async function GET() {
+async function getProjects() {
+  if (projectsCache && projectsCache.expiresAt > Date.now()) {
+    return projectsCache
+  }
+
   try {
     const projects = await fetchProjectsFromNotion()
     if (projects.length > 0) {
-      return NextResponse.json(
-        { source: "notion", projects },
-        { headers: cacheHeaders }
-      )
+      projectsCache = {
+        data: projects,
+        source: "notion",
+        expiresAt: Date.now() + CACHE_TTL,
+      }
+      return projectsCache
     }
   } catch (error) {
     console.error("Notion projects fetch failed", error)
   }
 
+  return { data: localProjects, source: "local", expiresAt: 0 }
+}
+
+export async function GET() {
+  const { data, source } = await getProjects()
   return NextResponse.json(
-    { source: "local", projects: localProjects },
-    { headers: cacheHeaders }
+    { source, projects: data },
+    { headers: { "Cache-Control": "no-store" } }
   )
 }
