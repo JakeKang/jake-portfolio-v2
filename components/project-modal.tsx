@@ -23,6 +23,7 @@ import { useNotionProjectDetail } from '@/hooks/use-notion-project-detail';
 import Image from 'next/image';
 import { useCallback, useMemo, useState } from 'react';
 import { useTheme } from 'next-themes';
+import { useI18n } from '@/components/i18n-provider';
 
 // Lazy load heavy components for better performance
 const Code = dynamic(
@@ -55,6 +56,7 @@ export function ProjectModal({
   open,
   onOpenChange,
 }: ProjectModalProps) {
+  const { content } = useI18n();
   const { resolvedTheme } = useTheme();
   const isDarkMode = resolvedTheme === 'dark';
 
@@ -157,9 +159,9 @@ export function ProjectModal({
           }}>
           <div className='modal-scroll overflow-y-auto max-h-[86vh] sm:max-h-[88vh] p-8 sm:p-10 lg:p-14'>
             <DialogHeader>
-              <DialogTitle className='sr-only'>프로젝트 상세 정보</DialogTitle>
+              <DialogTitle className='sr-only'>{content.projectModal.srTitle}</DialogTitle>
               <DialogDescription className='sr-only'>
-                프로젝트 정보를 불러오는 중입니다.
+                {content.projectModal.srLoading}
               </DialogDescription>
               <Skeleton className='h-8 w-2/3' />
               <Skeleton className='h-4 w-full' />
@@ -213,8 +215,7 @@ export function ProjectModal({
                 {project.title}
               </DialogTitle>
               <DialogDescription className='sr-only'>
-                프로젝트 상세 설명, 사용 기술, 기간, 관련 링크를 확인할 수
-                있습니다.
+                {content.projectModal.srDescription}
               </DialogDescription>
             </div>
           </DialogHeader>
@@ -257,7 +258,7 @@ export function ProjectModal({
               <button
                 type='button'
                 className='notion-lightbox__close'
-                aria-label='이미지 닫기'
+                aria-label={content.projectModal.closeImageAria}
                 onClick={(event) => {
                   event.stopPropagation();
                   closeLightbox();
@@ -291,7 +292,7 @@ export function ProjectModal({
                   href={project.link}
                   target='_blank'
                   rel='noopener noreferrer'>
-                  프로젝트 보기
+                  {content.projectModal.viewProject}
                 </a>
               </Button>
             )}

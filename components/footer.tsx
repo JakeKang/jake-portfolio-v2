@@ -1,4 +1,9 @@
+"use client";
+
+import { useI18n } from '@/components/i18n-provider';
+
 export function Footer() {
+  const { content } = useI18n();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -6,7 +11,7 @@ export function Footer() {
       <div className='max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-3 text-center md:text-left'>
         <p className='text-muted-foreground text-sm md:text-base leading-relaxed'></p>
         <p className='text-muted-foreground text-sm md:text-base leading-relaxed'>
-          Copyright© {currentYear} Jake Kang. All rights reserved.
+          {content.footer.copyright.replace('{year}', `${currentYear}`)}
         </p>
       </div>
     </footer>

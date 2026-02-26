@@ -1,8 +1,12 @@
+"use client";
+
 import { AnimatedSection } from '@/components/animated-section';
 import { SectionHeader } from '@/components/section-header';
-import { personalInfo } from '@/lib/data';
+import { useI18n } from '@/components/i18n-provider';
 
 export function About() {
+  const { content } = useI18n();
+
   return (
     <section
       id='about'
@@ -13,20 +17,19 @@ export function About() {
       </div>
       <div className='relative z-10 max-w-6xl mx-auto'>
         <div className='mb-8'>
-          <SectionHeader title='소개' />
+          <SectionHeader title={content.about.title} />
         </div>
 
         <AnimatedSection delay={100}>
           <p className='text-xl sm:text-2xl md:text-3xl lg:text-4xl text-foreground leading-relaxed mb-8 font-semibold text-balance tracking-tight'>
-            기술과 비즈니스, 사용자 경험 사이의 최적점을 찾아 제품의 실질적인
-            가치를 완성합니다.
+            {content.about.headline}
           </p>
         </AnimatedSection>
 
         <AnimatedSection delay={200}>
           <div className='text-base md:text-lg text-muted-foreground leading-relaxed'>
-            {personalInfo.bio.map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
+            {content.personalInfo.bio.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
         </AnimatedSection>

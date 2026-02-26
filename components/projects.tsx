@@ -12,10 +12,12 @@ import {
   notionProjectDetailQueryKey,
 } from "@/hooks/use-notion-project-detail"
 import { useQueryClient } from "@tanstack/react-query"
+import { useI18n } from "@/components/i18n-provider"
 
 const PROJECT_SKELETON_KEYS = ["skeleton-1", "skeleton-2", "skeleton-3", "skeleton-4"]
 
 export function Projects() {
+  const { content } = useI18n()
   const { data, isLoading } = useNotionProjects()
   const projectList = data?.projects ?? []
   const featuredProjects = projectList.filter((p) => p.category === "featured")
@@ -52,8 +54,8 @@ export function Projects() {
       <div className="max-w-6xl mx-auto">
         <div className="mb-12 md:mb-14">
           <SectionHeader
-            title="주요 프로젝트"
-            subtitle="실제 문제를 해결한 작업물들"
+            title={content.projects.featuredTitle}
+            subtitle={content.projects.featuredSubtitle}
           />
         </div>
 
@@ -77,8 +79,8 @@ export function Projects() {
           <>
             <div className="mt-16 mb-10 md:mb-12">
               <SectionHeader
-                title="기타 프로젝트"
-                subtitle="그 외 진행한 프로젝트들"
+                title={content.projects.otherTitle}
+                subtitle={content.projects.otherSubtitle}
               />
             </div>
 
@@ -98,7 +100,7 @@ export function Projects() {
 
         {!isLoading && projectList.length === 0 && (
           <div className="mt-10 text-sm text-muted-foreground">
-            프로젝트 데이터를 불러오는 중입니다.
+            {content.projects.loading}
           </div>
         )}
       </div>

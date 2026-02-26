@@ -1,6 +1,7 @@
 import type { Decorator, Preview } from '@storybook/nextjs-vite'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createElement } from 'react'
+import { I18nProvider } from '../components/i18n-provider'
 import '../app/globals.css'
 
 const queryClient = new QueryClient()
@@ -9,7 +10,7 @@ const withQueryClient: Decorator = (Story) =>
   createElement(
     QueryClientProvider,
     { client: queryClient },
-    createElement(Story)
+    createElement(I18nProvider, null, createElement(Story))
   )
 
 const preview: Preview = {

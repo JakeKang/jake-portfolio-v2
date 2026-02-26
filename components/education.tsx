@@ -1,8 +1,12 @@
+"use client"
+
 import { SectionHeader } from "@/components/section-header"
-import { educations } from "@/lib/data"
 import { EducationCard } from "@/components/cards/education-card"
+import { useI18n } from "@/components/i18n-provider"
 
 export function Education() {
+  const { content } = useI18n()
+
   return (
     <section
       id="education"
@@ -10,11 +14,14 @@ export function Education() {
     >
       <div className="max-w-6xl mx-auto">
         <div className="mb-10 md:mb-12">
-          <SectionHeader title="학력" subtitle="교육 배경" />
+          <SectionHeader
+            title={content.educationSection.title}
+            subtitle={content.educationSection.subtitle}
+          />
         </div>
 
         <div className="space-y-4">
-          {educations.map((education, index) => (
+          {content.educations.map((education, index) => (
             <EducationCard
               key={education.id}
               education={education}

@@ -1,6 +1,9 @@
+"use client"
+
 import { AnimatedSection } from "@/components/animated-section"
 import type { Activity } from "@/lib/types"
 import { ArrowUpRight } from "lucide-react"
+import { useI18n } from "@/components/i18n-provider"
 
 interface ActivityCardProps {
   activity: Activity
@@ -8,6 +11,8 @@ interface ActivityCardProps {
 }
 
 export function ActivityCard({ activity, index }: ActivityCardProps) {
+  const { content } = useI18n()
+
   return (
     <AnimatedSection delay={index * 100}>
       <div className="bg-card p-5 sm:p-6 lg:p-7 rounded-2xl border border-border">
@@ -35,7 +40,7 @@ export function ActivityCard({ activity, index }: ActivityCardProps) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary/80"
             >
-              바로가기
+              {content.activitiesSection.visitLink}
               <ArrowUpRight className="h-4 w-4" />
             </a>
           ) : (

@@ -1,11 +1,15 @@
+"use client";
+
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Github, Mail, FileText, MapPin, Briefcase } from 'lucide-react';
 import Image from 'next/image';
-import { personalInfo } from '@/lib/data';
 import { HeroSubtitle } from '@/components/hero-subtitle';
+import { useI18n } from '@/components/i18n-provider';
 
 export function Hero() {
+  const { content } = useI18n();
+  const { personalInfo } = content;
   const subtitleOptions = personalInfo.subtitleRotations?.length
     ? personalInfo.subtitleRotations
     : [personalInfo.subtitle];
@@ -24,7 +28,9 @@ export function Hero() {
   };
 
   return (
-    <section className='relative min-h-screen flex items-center px-5 md:px-10 lg:px-20 xl:px-28 2xl:px-36 py-20 md:py-24 lg:py-28 bg-secondary/30 overflow-hidden'>
+    <section
+      id='home'
+      className='relative min-h-screen flex items-center px-5 md:px-10 lg:px-20 xl:px-28 2xl:px-36 py-20 md:py-24 lg:py-28 bg-secondary/30 overflow-hidden'>
       <div className='pointer-events-none absolute inset-0'>
         <div className='absolute inset-0 hero-grid-bg opacity-60 dark:opacity-30' />
         <div className='absolute -top-32 right-[-10%] h-72 w-72 rounded-full bg-[radial-gradient(circle_at_top,_rgba(45,74,62,0.18),_transparent_65%)] blur-3xl' />
@@ -43,7 +49,7 @@ export function Hero() {
               <div className='w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden bg-secondary ring-4 ring-card shadow-lg'>
                 <Image
                   src='/profile.webp'
-                  alt='프로필 사진'
+                  alt={content.hero.profileAlt}
                   width={160}
                   height={160}
                   className='w-full h-full object-cover'
@@ -62,20 +68,21 @@ export function Hero() {
           {/* Text Content */}
           <div className='text-center lg:text-left flex-1 hero-reveal hero-reveal-delay'>
             <div>
-              <p className='text-primary font-medium mb-2 text-sm tracking-wide'>
-                안녕하세요
-              </p>
+              <p className='text-primary font-medium mb-2 text-sm tracking-wide'>{content.hero.greeting}</p>
             </div>
 
             <h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-4 tracking-tight'>
               <span className='text-primary'>{personalInfo.title}</span>
-              <span className='block mt-1'>{personalInfo.name}입니다</span>
+              <span className='block mt-1'>
+                {personalInfo.name}
+                {content.hero.introSuffix}
+              </span>
             </h1>
 
             <p className='text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mb-6 leading-relaxed mx-auto lg:mx-0'>
-              기술보다 문제 해결에 몰입합니다.
+              {content.hero.taglineLine1}
               <br />
-              복잡한 과정을 단순화하여 제품의 본질적인 편리함을 만듭니다.
+              {content.hero.taglineLine2}
             </p>
 
             {/* Quick Info */}
@@ -126,14 +133,14 @@ export function Hero() {
               <Button
                 asChild
                 className='bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-5 text-sm font-medium cursor-pointer'>
-                <a href='#projects'>프로젝트 보기</a>
+                <a href='#projects'>{content.hero.viewProjects}</a>
               </Button>
             </div>
           </div>
         </div>
       </div>
       <div className='pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-xs text-muted-foreground/80'>
-        <span>Scroll</span>
+        <span>{content.hero.scroll}</span>
         <span className='hero-scroll-indicator' aria-hidden='true' />
       </div>
     </section>

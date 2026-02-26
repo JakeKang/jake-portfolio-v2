@@ -1,7 +1,10 @@
+"use client"
+
 import { AnimatedSection } from "@/components/animated-section"
 import type { Project } from "@/lib/types"
 import { ArrowUpRight } from "lucide-react"
 import Image from "next/image"
+import { useI18n } from "@/components/i18n-provider"
 
 interface ProjectCardProps {
   project: Project
@@ -16,6 +19,8 @@ export function ProjectCard({
   onSelect,
   onPrefetch,
 }: ProjectCardProps) {
+  const { content } = useI18n()
+
   return (
     <AnimatedSection delay={index * 100}>
       <button
@@ -25,7 +30,7 @@ export function ProjectCard({
         onFocus={() => onPrefetch(project.id)}
         onTouchStart={() => onPrefetch(project.id)}
         className="group block w-full text-left bg-card rounded-2xl h-full border border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden"
-        aria-label={`${project.title} 상세 보기`}
+        aria-label={`${project.title} ${content.projectCard.detailAriaSuffix}`}
       >
         <div className="relative h-44 w-full bg-secondary/40">
           {project.coverImage ? (

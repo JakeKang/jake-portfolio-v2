@@ -4,9 +4,11 @@ import React from "react"
 import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { navItems } from "@/lib/data"
+import { LocaleToggle } from "@/components/locale-toggle"
+import { useI18n } from "@/components/i18n-provider"
 
 export function Header() {
+  const { content } = useI18n()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
@@ -37,14 +39,14 @@ export function Header() {
       }`}
     >
       <nav className="px-5 md:px-10 lg:px-20 xl:px-28 2xl:px-36 py-4 flex items-center justify-between max-w-7xl mx-auto">
-        <a href="#" className="text-xl font-bold text-foreground">
-          Portfolio<span className="text-primary">.</span>
+        <a href="#home" className="text-xl font-bold text-foreground">
+          {content.header.brand}<span className="text-primary">.</span>
         </a>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6">
           <ul className="flex items-center gap-8">
-            {navItems.map((item) => (
+            {content.navItems.map((item) => (
               <li key={item.label}>
                 <a
                   href={item.href}
@@ -57,14 +59,16 @@ export function Header() {
             ))}
           </ul>
           <ThemeToggle className="h-9 w-9" />
+          <LocaleToggle className="h-9 w-9" />
         </div>
         <div className="flex items-center gap-2 md:hidden">
           <ThemeToggle className="h-9 w-9" />
+          <LocaleToggle className="h-9 w-9" />
           <button
             type="button"
             className="p-2 text-foreground cursor-pointer"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label={isMobileMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
+            aria-label={isMobileMenuOpen ? content.header.menuCloseAria : content.header.menuOpenAria}
           >
             {isMobileMenuOpen ? (
               <X className="h-6 w-6" />
@@ -77,7 +81,7 @@ export function Header() {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-background/95 backdrop-blur-md border-b border-border">
           <ul className="px-6 py-4 space-y-4">
-            {navItems.map((item) => (
+            {content.navItems.map((item) => (
               <li key={item.label}>
                 <a
                   href={item.href}
@@ -89,7 +93,10 @@ export function Header() {
               </li>
             ))}
             <li>
-              <ThemeToggle className="h-9 w-9" />
+              <div className="flex items-center gap-2">
+                <ThemeToggle className="h-9 w-9" />
+                <LocaleToggle className="h-9 w-9" />
+              </div>
             </li>
           </ul>
         </div>

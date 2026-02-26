@@ -1,10 +1,15 @@
+"use client";
+
 import { AnimatedSection } from '@/components/animated-section';
 import { SectionHeader } from '@/components/section-header';
 import { Button } from '@/components/ui/button';
 import { Github, Mail, FileText } from 'lucide-react';
-import { personalInfo } from '@/lib/data';
+import { useI18n } from '@/components/i18n-provider';
 
 export function Contact() {
+  const { content } = useI18n();
+  const { personalInfo } = content;
+
   return (
     <section
       id='contact'
@@ -16,8 +21,8 @@ export function Contact() {
       <div className='relative z-10 max-w-6xl mx-auto text-center'>
         <div className='mb-8 md:mb-10'>
           <SectionHeader
-            title='연락처'
-            subtitle='새로운 기회에 항상 열려있습니다. 편하게 연락주세요.'
+            title={content.contact.title}
+            subtitle={content.contact.subtitle}
             centered
           />
         </div>
@@ -29,7 +34,7 @@ export function Contact() {
               className='bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base md:text-lg font-medium cursor-pointer'>
               <a href={`mailto:${personalInfo.email}`}>
                 <Mail className='mr-2 h-4 w-4' />
-                이메일 보내기
+                {content.contact.sendEmail}
               </a>
             </Button>
           </div>
@@ -42,7 +47,7 @@ export function Contact() {
               target='_blank'
               rel='noopener noreferrer'
               className='flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors p-3 rounded-lg hover:bg-secondary cursor-pointer'
-              aria-label='GitHub 프로필'>
+              aria-label={content.contact.githubAria}>
               <Github className='h-5 w-5' />
               <span className='text-sm font-medium'>GitHub</span>
             </a>
@@ -51,17 +56,10 @@ export function Contact() {
               target='_blank'
               rel='noopener noreferrer'
               className='flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors p-3 rounded-lg hover:bg-secondary cursor-pointer'
-              aria-label='Notion 페이지'>
+              aria-label={content.contact.notionAria}>
               <FileText className='h-5 w-5' />
               <span className='text-sm font-medium'>Notion</span>
             </a>
-            {/* <a
-              href={`mailto:${personalInfo.email}`}
-              className='flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors p-3 rounded-lg hover:bg-secondary cursor-pointer'
-              aria-label='이메일'>
-              <Mail className='h-5 w-5' />
-              <span className='text-sm font-medium'>Email</span>
-            </a> */}
           </div>
         </AnimatedSection>
       </div>
