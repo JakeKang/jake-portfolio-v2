@@ -21,7 +21,7 @@ export function About() {
         </div>
 
         <AnimatedSection delay={100}>
-          <p className='text-xl sm:text-2xl md:text-3xl lg:text-4xl text-foreground leading-relaxed mb-8 font-semibold text-balance tracking-tight'>
+          <p className='text-lg sm:text-xl md:text-2xl lg:text-3xl text-foreground leading-relaxed mb-8 font-semibold text-balance tracking-tight whitespace-pre-line'>
             {content.about.headline}
           </p>
         </AnimatedSection>
