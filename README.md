@@ -1,163 +1,137 @@
 # 프론트엔드 개발자 포트폴리오
 
-Next.js 16 기반의 현대적인 포트폴리오 웹사이트입니다.
+Next.js 16(App Router) 기반의 개인 포트폴리오 프로젝트입니다.
 
 ## 기술 스택
 
-| 분류           | 기술                         |
-| -------------- | ---------------------------- |
-| **Framework**  | Next.js 16.0.10 (App Router) |
-| **Language**   | TypeScript 5                 |
-| **UI Library** | React 19.2.0                 |
-| **Styling**    | Tailwind CSS 4.1.9           |
-| **Component**  | shadcn/ui (Radix UI)         |
-| **Analytics**  | Vercel Analytics             |
-| **Font**       | Pretendard Subset (WOFF2)    |
+| 분류           | 기술                     |
+| -------------- | ------------------------ |
+| Framework      | Next.js 16.1.6           |
+| Language       | TypeScript 5             |
+| UI Library     | React 19.2.0             |
+| Styling        | Tailwind CSS 4.1.9       |
+| State/Data     | TanStack Query v5        |
+| UI Components  | shadcn/ui + Radix UI     |
+| Content Source | Notion API               |
+| Analytics      | Vercel Analytics         |
+
+## 주요 특징
+
+- 한국어/영어 i18n 지원 (`components/i18n-provider.tsx`, `lib/i18n/content.ts`)
+- Notion 기반 프로젝트 목록/상세 조회
+- 프로젝트 목록 초기 로딩 안내 UI + 스켈레톤
+- Notion API 장애 시 프로젝트 섹션 오류 메시지 노출
+- 프로젝트 기간 기준 최신순 정렬
 
 ## 프로젝트 구조
 
-```
+```text
 ├── app/
-│   ├── globals.css       # 전역 스타일
-│   ├── layout.tsx        # 루트 레이아웃
-│   ├── page.tsx          # 메인 페이지
-│   └── robots.ts         # 크롤러 차단 설정
+│   ├── api/notion/projects/route.ts       # 프로젝트 목록 API (동적 + 인메모리 캐시)
+│   ├── api/notion/projects/[id]/route.ts  # 프로젝트 상세 API
+│   ├── globals.css                         # 전역 스타일
+│   ├── layout.tsx                          # 루트 레이아웃
+│   ├── page.tsx                            # 메인 페이지
+│   └── robots.ts                           # 크롤러 차단 설정
 ├── components/
-│   ├── ui/               # shadcn/ui 컴포넌트
-│   ├── cards/            # 카드 컴포넌트 모음
-│   ├── about.tsx         # 소개 섹션
-│   ├── contact.tsx       # 연락처 섹션
-│   ├── experience.tsx    # 경력 섹션
-│   ├── faq.tsx           # Q&A 섹션
-│   ├── footer.tsx        # 푸터
-│   ├── header.tsx        # 헤더/네비게이션
-│   ├── hero.tsx          # 히어로 섹션
-│   ├── projects.tsx      # 프로젝트 섹션
-├── hooks/                # 커스텀 훅
+│   ├── i18n-provider.tsx                   # 로케일 상태/콘텐츠 제공
+│   ├── projects.tsx                        # 프로젝트 섹션 UI
+│   ├── project-modal.tsx                   # 프로젝트 상세 모달
+│   ├── section-header.tsx                  # 섹션 공통 헤더
+│   ├── cards/                              # 카드/스켈레톤 컴포넌트
+│   └── ui/                                 # shadcn/ui 컴포넌트
+├── hooks/
+│   ├── use-notion-projects.ts              # 프로젝트 목록 Query
+│   └── use-notion-project-detail.ts        # 프로젝트 상세 Query
 ├── lib/
-│   ├── data.ts           # 포트폴리오 데이터
-│   ├── types.ts          # TypeScript 타입 정의
-│   └── utils.ts          # 유틸리티 함수
-├── public/               # 정적 파일 (이미지, 아이콘)
+│   ├── i18n/content.ts                     # 포트폴리오 텍스트/콘텐츠 원본
+│   ├── notion.ts                           # Notion 데이터 매핑/정렬
+│   ├── types.ts                            # 타입 정의
+│   └── utils.ts                            # 유틸
+├── tests/
+│   ├── e2e/                                # Playwright E2E
+│   └── unit/                               # Vitest 단위 테스트
+└── public/
 ```
-
-## 최신 최적화 (2026-02-10)
-
-- Notion 이미지 403 이슈 해결: `/api/notion/projects`를 `force-dynamic` + 인메모리 캐시(10분)로 전환
-- 폰트 최적화: `public/fonts/*.subset.woff2`만 사용하도록 전환 및 기존 full woff2 제거
-- 초기 렌더 경량화: Notion 전용 CSS(`react-notion-x`, `prismjs`, `katex`)를 모달 컴포넌트로 이동
-- 코드 정리: 미사용 `components/ui/*`, `hooks/use-toast.ts`, `styles/globals.css` 제거
-- Storybook 안정화: `.storybook/preview.ts`에 `QueryClientProvider` 데코레이터 적용
 
 ## 시작하기
 
 ### 필수 조건
 
-- Node.js 18.17 이상
-- pnpm (권장) 또는 npm
+- Node.js 18.17+
+- pnpm
 
-### 설치
+### 설치/실행
 
 ```bash
-# 의존성 설치
 pnpm install
-
-# 개발 서버 실행
 pnpm dev
 ```
 
-개발 서버가 [http://localhost:3000](http://localhost:3000)에서 실행됩니다.
+개발 서버: `http://localhost:3000`
 
-### 빌드
+### 빌드/실행
 
 ```bash
-# 프로덕션 빌드
 pnpm build
-
-# 프로덕션 서버 실행
 pnpm start
 ```
 
-## 커스터마이징
+## 환경 변수
 
-### 개인 정보 수정
+Notion 연동을 위해 아래 변수가 필요합니다.
 
-`lib/data.ts` 파일에서 포트폴리오 데이터를 수정할 수 있습니다:
+```bash
+NOTION_TOKEN=...
+NOTION_FEATURED_PROJECTS_DB_ID=...
+NOTION_OTHER_PROJECTS_DB_ID=...
+```
 
-- `personalInfo`: 이름, 직함, 연락처, 소셜 링크
-- `projects`: 프로젝트 목록
-- `skillCategories`: 기술 스택
-- `experiences`: 경력 사항
-- `faqs`: 자주 묻는 질문
+## 데이터/카피 수정 방법
 
-### 이미지 변경
-
-`public/` 폴더의 이미지를 교체하세요:
-
-- `profile.webp`: 프로필 사진
-- `icon.svg`: 파비콘
-
-### 스타일 수정
-
-- `app/globals.css`: 전역 CSS 변수 및 스타일
-- Tailwind CSS 클래스를 사용하여 컴포넌트 스타일 조정
+- 섹션 텍스트(한/영): `lib/i18n/content.ts`
+- 프로젝트 Notion 매핑/정렬: `lib/notion.ts`
+- 섹션 스타일: 각 `components/*.tsx`, 공통 토큰은 `app/globals.css`
 
 ## 스크립트
 
-| 명령어       | 설명               |
-| ------------ | ------------------ |
-| `pnpm dev`   | 개발 서버 실행     |
-| `pnpm build` | 프로덕션 빌드      |
-| `pnpm start` | 프로덕션 서버 실행 |
-| `pnpm lint`  | ESLint 실행        |
+| 명령어                         | 설명 |
+| ------------------------------ | ---- |
+| `pnpm dev`                     | 개발 서버 실행 |
+| `pnpm build`                   | 프로덕션 빌드 |
+| `pnpm start`                   | 프로덕션 서버 실행 |
+| `pnpm lint`                    | ESLint 검사 |
+| `pnpm test:unit`               | 단위 테스트 |
+| `pnpm test:e2e`                | E2E 테스트 |
+| `pnpm test:e2e tests/e2e/home.spec.ts` | 홈 E2E 단일 실행 |
 
-## 성능/보안/캐싱
+## Notion 캐싱/오류 처리
 
-### Notion 캐싱
+### 프로젝트 목록 API (`/api/notion/projects`)
 
-- `/api/notion/projects`: `force-dynamic` + 인메모리 캐시(10분) + `Cache-Control: no-store`
-- `/api/notion/projects/[id]`: `revalidate=300` + 인메모리 캐시(5분)
+- `dynamic = "force-dynamic"`
+- 성공 응답: 서버 인메모리 캐시 TTL 10분
+- 실패 응답: `503` + `{ source: "error", projects: [] }`
+- 응답 헤더: `Cache-Control: no-store`
 
-### SEO 차단 (비공개 포트폴리오)
+### 프로젝트 상세 API (`/api/notion/projects/[id]`)
 
-- `app/robots.ts`에서 전체 크롤러 차단
-- `app/layout.tsx`의 `metadata.robots`로 noindex/noarchive 설정
-- `next.config.mjs`에서 `X-Robots-Tag` 헤더 적용
+- `revalidate=300` + 인메모리 캐시(5분)
 
-### 보안 헤더
+## 보안/SEO
 
-`next.config.mjs`에 기본 보안 헤더를 추가했습니다:
-
-- `X-Frame-Options: DENY`
-- `X-Content-Type-Options: nosniff`
-- `Referrer-Policy: strict-origin-when-cross-origin`
-- `Permissions-Policy: camera=(), microphone=(), geolocation=()`
-- `Strict-Transport-Security` (HTTPS)
-
-### Lighthouse 성능 테스트
-
-```bash
-pnpm build
-pnpm start -p 3000
-npx lighthouse http://localhost:3000 --output=json --output-path=./lighthouse-report.json --only-categories=performance --chrome-flags="--headless"
-```
-
-## 이슈 트래킹
-
-### [해결] Notion 커버 이미지 403 에러 (2025-02-10)
-
-**증상**: 페이지 첫 진입 시 프로젝트 카드의 Notion 커버 이미지가 `403 Forbidden` 에러 발생. 프로젝트 모달 내부 이미지는 정상 로드.
-
-**원인**: Notion `file` 타입 커버 이미지는 signed S3 URL(`prod-files-secure.s3.us-west-2.amazonaws.com`)로 약 1시간 후 만료됨. `/api/notion/projects` 라우트가 `force-static`으로 설정되어 빌드 시점의 URL이 고정 → 만료 후 403 발생. 모달은 열릴 때마다 `notion-client`로 fresh 데이터를 요청하므로 정상 동작.
-
-**해결**: `/api/notion/projects/route.ts`를 `force-static` → `force-dynamic`으로 변경하고, 서버 인메모리 캐시(TTL 10분)를 적용하여 매 요청마다 fresh한 signed URL을 반환하도록 수정. 응답 헤더를 `Cache-Control: no-store`로 설정하여 CDN/브라우저가 만료된 URL을 캐싱하지 않도록 함.
-
-**변경 파일**: `app/api/notion/projects/route.ts`
+- `app/robots.ts`, `metadata.robots`, `X-Robots-Tag` 기반 noindex 설정
+- `next.config.mjs` 보안 헤더 적용
+  - `X-Frame-Options: DENY`
+  - `X-Content-Type-Options: nosniff`
+  - `Referrer-Policy: strict-origin-when-cross-origin`
+  - `Permissions-Policy: camera=(), microphone=(), geolocation=()`
+  - `Strict-Transport-Security`
 
 ## 배포
 
-개인 서버 PM2 환경 또는 Vercel에 배포할 수 있습니다.
+Vercel 또는 개인 서버(PM2) 환경에 배포할 수 있습니다.
 
 ## 라이선스
 
-MIT License
+MIT
