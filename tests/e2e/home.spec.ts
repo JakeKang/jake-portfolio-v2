@@ -9,10 +9,12 @@ test("project modal opens", async ({ page }) => {
   await page.goto("/")
   const buttons = await page.getByRole("button", { name: /상세 보기/ }).all()
   if (buttons.length === 0) {
-    const emptyState = page.getByText("프로젝트 데이터를 불러오는 중입니다.")
+    const emptyState = page.getByText("표시할 프로젝트가 없습니다.")
+    const loadingState = page.getByText("Notion에서 데이터를 받아오는 중입니다.")
     const skeleton = page.locator('[data-slot="skeleton"]').first()
     const emptyVisible = await emptyState.isVisible().catch(() => false)
-    if (!emptyVisible) {
+    const loadingVisible = await loadingState.isVisible().catch(() => false)
+    if (!emptyVisible && !loadingVisible) {
       await expect(skeleton).toBeVisible()
     }
     return

@@ -97,6 +97,38 @@ function getFirstDateProperty(
   return ""
 }
 
+function getPeriodStartSortValue(period: string | undefined) {
+  if (!period) {
+    return Number.NEGATIVE_INFINITY
+  }
+
+  const match = period.match(/(\d{4})[-./](\d{1,2})/)
+  if (!match) {
+    return Number.NEGATIVE_INFINITY
+  }
+
+  const year = Number.parseInt(match[1], 10)
+  const month = Number.parseInt(match[2], 10)
+  if (Number.isNaN(year) || Number.isNaN(month)) {
+    return Number.NEGATIVE_INFINITY
+  }
+
+  return year * 100 + month
+}
+
+function sortProjectsByRecentPeriod(projects: Project[]) {
+  return [...projects].sort((a, b) => {
+    const valueA = getPeriodStartSortValue(a.period)
+    const valueB = getPeriodStartSortValue(b.period)
+
+    if (valueA !== valueB) {
+      return valueB - valueA
+    }
+
+    return a.title.localeCompare(b.title, "ko")
+  })
+}
+
 function getMultiSelect(
   property:
     | { type: "multi_select"; multi_select: { name: string }[] }
@@ -213,5 +245,5 @@ export async function fetchProjectsFromNotion(): Promise<Project[]> {
     ? await queryProjects(OTHER_PROJECTS_DB_ID, "other")
     : []
 
-  return [...featured, ...other]
+  return sortProjectsByRecentPeriod([...featured, ...other])
 }

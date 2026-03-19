@@ -59,6 +59,24 @@ export function Projects() {
           />
         </div>
 
+        {isLoading && (
+          <div
+            className="mb-6 rounded-xl border border-border/70 bg-background/70 px-4 py-3 backdrop-blur-sm"
+            aria-live="polite"
+          >
+            <div className="flex items-center gap-3">
+              <span className="relative flex size-2.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/40" />
+                <span className="relative inline-flex size-2.5 rounded-full bg-primary" />
+              </span>
+              <p className="text-sm text-foreground/90">{content.projects.loading}</p>
+            </div>
+            <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted">
+              <div className="h-full w-2/5 rounded-full bg-primary/60 animate-pulse" />
+            </div>
+          </div>
+        )}
+
         <div className="grid md:grid-cols-2 gap-5 md:gap-6 xl:gap-8">
           {isLoading
             ? PROJECT_SKELETON_KEYS.map((key, index) => (
@@ -100,7 +118,7 @@ export function Projects() {
 
         {!isLoading && projectList.length === 0 && (
           <div className="mt-10 text-sm text-muted-foreground">
-            {content.projects.loading}
+            {content.projects.empty}
           </div>
         )}
       </div>

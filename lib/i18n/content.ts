@@ -48,6 +48,7 @@ type ProjectsContent = {
   otherTitle: string;
   otherSubtitle: string;
   loading: string;
+  empty: string;
 };
 
 type ExperienceContent = {
@@ -193,10 +194,11 @@ const koContent: PortfolioContent = {
   },
   projects: {
     featuredTitle: '주요 프로젝트',
-    featuredSubtitle: '실제 문제를 해결한 작업물들',
+    featuredSubtitle: '문제를 해결하며 만든 주요 프로젝트 정리',
     otherTitle: '기타 프로젝트',
-    otherSubtitle: '그 외 진행한 프로젝트들',
-    loading: '프로젝트 데이터를 불러오는 중입니다.',
+    otherSubtitle: '기술을 확장하며 진행한 프로젝트 기록',
+    loading: 'Notion에서 데이터를 받아오는 중입니다.',
+    empty: '표시할 프로젝트가 없습니다.',
   },
   experience: {
     title: '경력',
@@ -420,10 +422,11 @@ const enContent: PortfolioContent = {
   },
   projects: {
     featuredTitle: 'Featured Projects',
-    featuredSubtitle: 'Work that solved real-world problems',
+    featuredSubtitle: 'A curated set of projects built to solve real problems',
     otherTitle: 'Other Projects',
-    otherSubtitle: 'Additional projects I have worked on',
-    loading: 'Loading project data...',
+    otherSubtitle: 'Additional project work across diverse contexts',
+    loading: 'Fetching project data from Notion...',
+    empty: 'No projects are available to display yet.',
   },
   experience: {
     title: 'Experience',
