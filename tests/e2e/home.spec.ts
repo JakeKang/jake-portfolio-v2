@@ -11,10 +11,12 @@ test("project modal opens", async ({ page }) => {
   if (buttons.length === 0) {
     const emptyState = page.getByText("표시할 프로젝트가 없습니다.")
     const loadingState = page.getByText("Notion에서 데이터를 받아오는 중입니다.")
+    const errorState = page.getByText("Notion API 서버 문제로 프로젝트 데이터를 불러오지 못했습니다.")
     const skeleton = page.locator('[data-slot="skeleton"]').first()
     const emptyVisible = await emptyState.isVisible().catch(() => false)
     const loadingVisible = await loadingState.isVisible().catch(() => false)
-    if (!emptyVisible && !loadingVisible) {
+    const errorVisible = await errorState.isVisible().catch(() => false)
+    if (!emptyVisible && !loadingVisible && !errorVisible) {
       await expect(skeleton).toBeVisible()
     }
     return

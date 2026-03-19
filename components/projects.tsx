@@ -18,8 +18,9 @@ const PROJECT_SKELETON_KEYS = ["skeleton-1", "skeleton-2", "skeleton-3", "skelet
 
 export function Projects() {
   const { content } = useI18n()
-  const { data, isLoading } = useNotionProjects()
+  const { data, isLoading, isError } = useNotionProjects()
   const projectList = data?.projects ?? []
+  const hasProjectsError = !isLoading && isError
   const featuredProjects = projectList.filter((p) => p.category === "featured")
   const otherProjects = projectList.filter((p) => p.category === "other")
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
@@ -77,6 +78,12 @@ export function Projects() {
           </div>
         )}
 
+        {hasProjectsError && (
+          <div className="mb-6 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3">
+            <p className="text-sm text-destructive">{content.projects.error}</p>
+          </div>
+        )}
+
         <div className="grid md:grid-cols-2 gap-5 md:gap-6 xl:gap-8">
           {isLoading
             ? PROJECT_SKELETON_KEYS.map((key, index) => (
@@ -116,7 +123,7 @@ export function Projects() {
           </>
         )}
 
-        {!isLoading && projectList.length === 0 && (
+        {!isLoading && !hasProjectsError && projectList.length === 0 && (
           <div className="mt-10 text-sm text-muted-foreground">
             {content.projects.empty}
           </div>

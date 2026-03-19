@@ -49,6 +49,7 @@ type ProjectsContent = {
   otherSubtitle: string;
   loading: string;
   empty: string;
+  error: string;
 };
 
 type ExperienceContent = {
@@ -200,6 +201,7 @@ const koContent: PortfolioContent = {
     otherSubtitle: '기술을 확장하며 진행한 프로젝트 기록',
     loading: 'Notion에서 데이터를 받아오는 중입니다.',
     empty: '표시할 프로젝트가 없습니다.',
+    error: 'Notion API 서버 문제로 프로젝트 데이터를 불러오지 못했습니다.',
   },
   experience: {
     title: '경력',
@@ -412,6 +414,7 @@ const enContent: PortfolioContent = {
     otherSubtitle: 'Additional project work across diverse contexts',
     loading: 'Fetching project data from Notion...',
     empty: 'No projects are available to display yet.',
+    error: 'Unable to load project data due to a Notion API server issue.',
   },
   experience: {
     title: 'Experience',

@@ -3,7 +3,7 @@ import type { Project } from "@/lib/types"
 
 interface NotionProjectsResponse {
   projects: Project[]
-  source: string
+  source: "notion"
 }
 
 async function fetchNotionProjects(): Promise<NotionProjectsResponse> {
